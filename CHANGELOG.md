@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Browser Compatibility**
+  - Fixed "crypto.randomUUID is not a function" error in POS Events Store
+  - Added robust UUID generation with multi-tier fallback strategy (native API → Crypto API → Math.random)
+  - Implemented RFC4122 v4 compliant UUID generation for older browsers and environments
+  - Performance optimization with pre-computed byte-to-hex lookup table
+  - Support for globalThis, window.crypto, and legacy environments
+
 ## [1.7.1] - 2025-11-13
 
 ### Added
