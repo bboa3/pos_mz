@@ -137,7 +137,7 @@
 				</div>
 
 				<!-- Load More -->
-				<div v-if="hasMore && !loading" class="text-center">
+				<div v-if="hasMore && !invoicesResource.loading" class="text-center">
 					<Button variant="subtle" @click="loadMore">
 						Load More
 					</Button>

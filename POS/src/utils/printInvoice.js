@@ -27,6 +27,7 @@ export async function printInvoice(
 			no_letterhead: letterhead ? 0 : 1,
 			_lang: "en",
 			trigger_print: 1,
+			_t: Date.now(), // Cache buster to force fresh print format
 		})
 
 		if (letterhead) {
@@ -340,6 +341,16 @@ function printInvoiceCustom(invoiceData) {
 					<div class="total-row">
 						<span>Tax:</span>
 						<span>${formatCurrency(invoiceData.total_taxes_and_charges)}</span>
+					</div>
+					`
+							: ""
+					}
+					${
+						invoiceData.discount_amount
+							? `
+					<div class="total-row" style="color: #28a745;">
+						<span>Additional Discount${invoiceData.additional_discount_percentage ? ` (${Number(invoiceData.additional_discount_percentage).toFixed(1)}%)` : ""}:</span>
+						<span>-${formatCurrency(Math.abs(invoiceData.discount_amount))}</span>
 					</div>
 					`
 							: ""
