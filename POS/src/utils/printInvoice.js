@@ -5,6 +5,7 @@ import { call } from "@/utils/apiWrapper"
  * @param {Object} invoiceData - The invoice document data
  * @param {string} printFormat - The print format name (optional)
  * @param {string} letterhead - The letterhead name (optional)
+ * @note Use "POS Next Receipt" format for thermal printer (80mm) or configure via POS Profile
  */
 export async function printInvoice(
 	invoiceData,
@@ -35,7 +36,7 @@ export async function printInvoice(
 		}
 
 		// Open PDF in new window - browser will handle print dialog
-		const printUrl = `/api/method/frappe.utils.print_format.download_pdf?${params.toString()}`
+		const printUrl = `/printview?${params.toString()}`
 		const printWindow = window.open(printUrl, "_blank", "width=800,height=600")
 
 		if (!printWindow) {
