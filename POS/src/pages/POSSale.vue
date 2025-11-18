@@ -229,6 +229,11 @@
 						@remove-offer="offer => cartStore.removeOffer(offer, shiftStore.currentProfile, offersDialogRef.value)"
 						@update-uom="cartStore.changeItemUOM"
 						@edit-item="handleEditItem"
+						@view-shift="uiStore.showOpenShiftDialog = true"
+						@show-drafts="uiStore.showDraftDialog = true"
+						@show-history="uiStore.showHistoryDialog = true"
+						@show-return="uiStore.showReturnDialog = true"
+						@close-shift="handleCloseShift()"
 					/>
 				</div>
 			</keep-alive>
