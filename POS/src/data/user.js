@@ -15,9 +15,16 @@ export const userData = reactive({
 	userImage: null,
 
 	refresh() {
-		this.userId = getCookie("user_id")
-		this.fullName = getCookie("full_name")
-		this.userImage = getCookie("user_image")
+		const userId = getCookie("user_id")
+		const fullName = getCookie("full_name")
+		const userImage = getCookie("user_image")
+
+		// Only update if we have valid data (not Guest)
+		if (userId && userId !== "Guest") {
+			this.userId = userId
+			this.fullName = fullName
+			this.userImage = userImage
+		}
 	},
 
 	getDisplayName() {
@@ -34,7 +41,20 @@ export const userData = reactive({
 	},
 })
 
+// Initial refresh
 userData.refresh()
+
+// Watch for cookie changes (e.g., after login) and auto-refresh
+// This uses MutationObserver to detect document.cookie changes
+if (typeof window !== 'undefined') {
+	let lastCookie = document.cookie
+	setInterval(() => {
+		if (document.cookie !== lastCookie) {
+			lastCookie = document.cookie
+			userData.refresh()
+		}
+	}, 500) // Check every 500ms for cookie changes
+}
 
 export const useUserData = () => ({
 	userName: computed(() => userData.getDisplayName()),

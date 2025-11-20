@@ -3,7 +3,7 @@ import { createResource } from "frappe-ui"
 import { computed, reactive } from "vue"
 
 import { ensureCSRFToken } from "@/utils/csrf"
-import { userResource } from "./user"
+import { userResource, userData } from "./user"
 
 export function sessionUser() {
 	const cookies = new URLSearchParams(document.cookie.split("; ").join("&"))
@@ -28,6 +28,11 @@ export const session = reactive({
 			await ensureCSRFToken()
 
 			await userResource.reload()
+
+			// Refresh userData from cookies after login
+			// The auto-refresh interval will also pick this up, but we do it immediately for responsiveness
+			userData.refresh()
+
 			session.user = sessionUser()
 			session.login.reset()
 			// Don't redirect here - let the Login page watcher handle navigation
