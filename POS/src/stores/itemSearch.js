@@ -740,7 +740,8 @@ export const useItemSearchStore = defineStore("itemSearch", () => {
 				hasMore.value = false
 
 				if (fetchedItems.length > 0) {
-					// Cache ALL filtered items for offline use
+					// Clear cache first to remove any disabled/stale items, then cache fresh data
+					await offlineWorker.clearItemsCache()
 					await offlineWorker.cacheItems(fetchedItems)
 					cacheReady.value = true
 
@@ -781,7 +782,8 @@ export const useItemSearchStore = defineStore("itemSearch", () => {
 					// loadMoreItems() will fetch additional batches as user scrolls
 					hasMore.value = true
 
-					// Cache first batch for offline support
+					// Clear cache first to remove any disabled/stale items, then cache fresh data
+					await offlineWorker.clearItemsCache()
 					await offlineWorker.cacheItems(list)
 
 					// Mark data as fresh

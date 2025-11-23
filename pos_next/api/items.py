@@ -24,6 +24,7 @@ ITEM_RESULT_FIELDS = [
 	"brand",
 	"has_variants",
 	"custom_company",
+	"disabled",
 ]
 
 ITEM_RESULT_COLUMNS = ",\n\t".join(ITEM_RESULT_FIELDS)
@@ -893,6 +894,7 @@ def get_items(pos_profile, search_term=None, item_group=None, start=0, limit=20)
 					"brand",
 					"has_variants",
 					"custom_company",
+					"disabled",
 				],
 				start=start,
 				page_length=limit,

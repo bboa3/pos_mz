@@ -480,9 +480,12 @@ async function searchCachedItems(searchTerm = "", limit = 50) {
 	try {
 		const db = await initDB()
 
-		// Empty search - return top N items
+		// Empty search - return top N items (excluding disabled items)
 		if (!searchTerm || searchTerm.trim().length === 0) {
-			const results = await db.table("items").limit(limit).toArray()
+			const results = await db.table("items")
+				.filter(item => !item.disabled)
+				.limit(limit)
+				.toArray()
 			cacheQueryResult(cacheKey, results)
 			return results
 		}
@@ -496,6 +499,7 @@ async function searchCachedItems(searchTerm = "", limit = 50) {
 			const barcodeResults = await db.table("items")
 				.where("barcodes")
 				.equals(term)
+				.filter(item => !item.disabled)
 				.limit(limit)
 				.toArray()
 
@@ -509,6 +513,7 @@ async function searchCachedItems(searchTerm = "", limit = 50) {
 			const codeResults = await db.table("items")
 				.where("item_code")
 				.startsWithIgnoreCase(term)
+				.filter(item => !item.disabled)
 				.limit(limit)
 				.toArray()
 
@@ -522,6 +527,7 @@ async function searchCachedItems(searchTerm = "", limit = 50) {
 			const nameResults = await db.table("items")
 				.where("item_name")
 				.startsWithIgnoreCase(term)
+				.filter(item => !item.disabled)
 				.limit(limit)
 				.toArray()
 
@@ -534,7 +540,10 @@ async function searchCachedItems(searchTerm = "", limit = 50) {
 
 		// Fallback: Multi-word or complex search
 		// Fetch larger sample and filter in memory (trade memory for speed)
-		const allItems = await db.table("items").limit(limit * 10).toArray()
+		const allItems = await db.table("items")
+			.filter(item => !item.disabled)
+			.limit(limit * 10)
+			.toArray()
 
 		const results = allItems
 			.map(item => {
