@@ -26,9 +26,15 @@
 
 				<!-- Variant Options with Attribute Selection -->
 				<div v-else-if="mode === 'variant' && options.length > 0" class="space-y-4">
-					<!-- Display item image and info -->
+					<!-- Display item image and info - show variant image when selected, otherwise template image -->
 					<div class="flex items-center justify-center mb-4">
-						<img v-if="item?.image" :src="item.image" loading="lazy" :alt="item.item_name" class="w-32 h-32 object-contain rounded-lg" />
+						<img
+							v-if="matchedVariant?.data?.image || item?.image"
+							:src="matchedVariant?.data?.image || item.image"
+							loading="lazy"
+							:alt="matchedVariant?.label || item.item_name"
+							class="w-32 h-32 object-contain rounded-lg transition-opacity duration-300"
+						/>
 					</div>
 
 					<!-- Group variants by attributes -->
@@ -60,8 +66,8 @@
 							</div>
 							<div class="text-right">
 								<p class="text-sm font-bold text-blue-600">{{ formatCurrency(matchedVariant.rate || 0) }}</p>
-								<p class="text-xs" :class="matchedVariant.stock > 0 ? 'text-green-600' : 'text-red-600'">
-									Stock: {{ matchedVariant.stock }}
+								<p class="text-xs" :class="(matchedVariant.stock ?? matchedVariant.data?.actual_qty ?? 0) > 0 ? 'text-green-600' : 'text-red-600'">
+									Stock: {{ matchedVariant.stock ?? matchedVariant.data?.actual_qty ?? 0 }}
 								</p>
 							</div>
 						</div>
@@ -253,7 +259,7 @@ const variantsResource = createResource({
 			attributes: v.attributes || {},
 			rate: v.rate || 0,
 			priceLabel: `per ${v.stock_uom}`,
-			stock: v.actual_qty,
+			stock: v.actual_qty ?? 0,
 			data: v, // Full variant data
 		}))
 		loading.value = false
@@ -275,7 +281,7 @@ watch(
 )
 
 // Watch mode and item changes to reload options
-watch([() => props.mode, () => props.item], ([newMode, newItem]) => {
+watch([() => props.mode, () => props.item], ([, newItem]) => {
 	if (props.modelValue && newItem) {
 		loadOptions()
 	}

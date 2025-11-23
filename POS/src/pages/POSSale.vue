@@ -1592,10 +1592,14 @@ async function handleOptionSelected(option) {
 				uiStore.showItemSelectionDialog = false
 				uiStore.showBatchSerialDialog = true
 			} else {
-				cartStore.addItem(variant, cartStore.pendingItemQty)
-				uiStore.showItemSelectionDialog = false
-				cartStore.clearPendingItem()
-				showSuccess(`${variant.item_name} added to cart`)
+				try {
+					cartStore.addItem(variant, cartStore.pendingItemQty, false, shiftStore.currentProfile)
+					uiStore.showItemSelectionDialog = false
+					cartStore.clearPendingItem()
+					showSuccess(`${variant.item_name} added to cart`)
+				} catch (error) {
+					showError(error.message)
+				}
 			}
 		} else if (option.type === "uom") {
 			const itemDetails = await cartStore.getItemDetailsResource.submit({
@@ -1619,10 +1623,14 @@ async function handleOptionSelected(option) {
 				uiStore.showItemSelectionDialog = false
 				uiStore.showBatchSerialDialog = true
 			} else {
-				cartStore.addItem(itemToAdd, cartStore.pendingItemQty)
-				uiStore.showItemSelectionDialog = false
-				cartStore.clearPendingItem()
-				showSuccess(`${itemToAdd.item_name} (${option.uom}) added to cart`)
+				try {
+					cartStore.addItem(itemToAdd, cartStore.pendingItemQty, false, shiftStore.currentProfile)
+					uiStore.showItemSelectionDialog = false
+					cartStore.clearPendingItem()
+					showSuccess(`${itemToAdd.item_name} (${option.uom}) added to cart`)
+				} catch (error) {
+					showError(error.message)
+				}
 			}
 		}
 	} catch (error) {
@@ -1725,8 +1733,12 @@ function handleBatchSerialSelected(batchSerial) {
 			quantity: cartStore.pendingItemQty,
 			...batchSerial,
 		}
-		cartStore.addItem(itemToAdd)
-		cartStore.clearPendingItem()
+		try {
+			cartStore.addItem(itemToAdd, cartStore.pendingItemQty, false, shiftStore.currentProfile)
+			cartStore.clearPendingItem()
+		} catch (error) {
+			showError(error.message)
+		}
 	}
 }
 
@@ -1837,7 +1849,8 @@ async function handleEditOfflineInvoice(invoice) {
 
 		if (invoiceData.items && invoiceData.items.length > 0) {
 			for (const item of invoiceData.items) {
-				cartStore.addItem(item)
+				// Use autoAdd=true to skip stock validation when loading saved invoices
+				cartStore.addItem(item, item.qty || 1, true, shiftStore.currentProfile)
 			}
 		}
 

@@ -486,6 +486,7 @@ def get_item_variants(template_item, pos_profile):
 				"item_name",
 				"stock_uom",
 				"image",
+				"is_stock_item",
 				"has_batch_no",
 				"has_serial_no",
 				"item_group",

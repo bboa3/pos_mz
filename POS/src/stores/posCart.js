@@ -64,7 +64,14 @@ export const usePOSCartStore = defineStore("posCart", () => {
 		// Check stock availability before adding to cart
 		// Skip validation for batch/serial items - they have their own validation in the dialog
 		// Check for stock items AND Product Bundles (bundles now have calculated stock)
-		if (currentProfile && !autoAdd && settingsStore.shouldEnforceStockValidation() && (item.is_stock_item || item.is_bundle) && !item.has_serial_no && !item.has_batch_no) {
+		// Also check items with actual_qty defined (catches misconfigured items)
+
+		// Determine if this item should be validated for stock
+		// Include: stock items, bundles, OR items with actual_qty defined (catches misconfigured items)
+		const hasActualQty = item.actual_qty !== undefined || item.stock_qty !== undefined
+		const shouldValidateStock = (item.is_stock_item || item.is_bundle || hasActualQty)
+
+		if (currentProfile && !autoAdd && settingsStore.shouldEnforceStockValidation() && shouldValidateStock && !item.has_serial_no && !item.has_batch_no) {
 			const warehouse = item.warehouse || currentProfile.warehouse
 			const actualQty =
 				item.actual_qty !== undefined ? item.actual_qty : item.stock_qty || 0

@@ -1083,10 +1083,12 @@ function handleItemClick(itemCode) {
 	if (!item) return
 
 	// Check stock availability and show error if needed, but still emit the event
-	// Skip validation for batch/serial items - they have their own validation in the dialog
+	// Skip validation for:
+	// - Batch/serial items - they have their own validation in the dialog
+	// - Item templates (has_variants) - variants have their own stock, template shouldn't be checked
 	// Check stock for stock items AND Product Bundles (bundles now have calculated stock)
 	const qty = Math.floor(item.actual_qty ?? item.stock_qty ?? 0)
-	if ((item.is_stock_item || item.is_bundle) && !item.has_serial_no && !item.has_batch_no && qty <= 0 && settingsStore.shouldEnforceStockValidation()) {
+	if ((item.is_stock_item || item.is_bundle) && !item.has_variants && !item.has_serial_no && !item.has_batch_no && qty <= 0 && settingsStore.shouldEnforceStockValidation()) {
 		const itemType = item.is_bundle ? "Bundle" : "Item"
 		showError(`"${item.item_name}" cannot be added to cart. ${itemType} is out of stock. Allow Negative Stock is disabled.`)
 		return
