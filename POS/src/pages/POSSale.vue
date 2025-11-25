@@ -31,7 +31,7 @@
 					<button
 						v-if="shiftStore.hasOpenShift"
 						@click="uiStore.showOpenShiftDialog = true"
-						class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 flex items-center space-x-3 transition-colors"
+						class="w-full text-start px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 flex items-center gap-3 transition-colors"
 					>
 						<svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -40,19 +40,19 @@
 					</button>
 					<button
 						@click="uiStore.showDraftDialog = true"
-						class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 flex items-center space-x-3 transition-colors relative"
+						class="w-full text-start px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 flex items-center gap-3 transition-colors relative"
 					>
 						<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
 						</svg>
 						<span>{{ __('Draft Invoices') }}</span>
-						<span v-if="draftsStore.draftsCount > 0" class="ml-auto text-xs bg-purple-600 text-white px-1.5 py-0.5 rounded-full">
+						<span v-if="draftsStore.draftsCount > 0" class="ms-auto text-xs bg-purple-600 text-white px-1.5 py-0.5 rounded-full">
 							{{ draftsStore.draftsCount }}
 						</span>
 					</button>
 					<button
 						@click="uiStore.showHistoryDialog = true"
-						class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 flex items-center space-x-3 transition-colors"
+						class="w-full text-start px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 flex items-center gap-3 transition-colors"
 					>
 						<svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -62,19 +62,19 @@
 					<button
 						v-if="offlineStore.pendingInvoicesCount > 0"
 						@click="uiStore.showOfflineInvoicesDialog = true; offlineStore.loadPendingInvoices()"
-						class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 flex items-center space-x-3 transition-colors relative"
+						class="w-full text-start px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-3 transition-colors relative"
 					>
 						<svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
 						</svg>
 						<span>{{ __('Offline Invoices') }}</span>
-						<span class="ml-auto text-xs bg-orange-600 text-white px-1.5 py-0.5 rounded-full">
+						<span class="ms-auto text-xs bg-orange-600 text-white px-1.5 py-0.5 rounded-full">
 							{{ offlineStore.pendingInvoicesCount }}
 						</span>
 					</button>
 					<button
 						@click="uiStore.showReturnDialog = true"
-						class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 flex items-center space-x-3 transition-colors"
+						class="w-full text-start px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 flex items-center gap-3 transition-colors"
 					>
 						<svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
@@ -85,7 +85,7 @@
 				<template #additional-actions>
 					<button
 						@click="handleCloseShift()"
-						class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 flex items-center space-x-3 transition-colors"
+						class="w-full text-start px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-3 transition-colors"
 					>
 						<svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -122,7 +122,7 @@
 					:aria-selected="uiStore.mobileActiveTab === 'items'"
 					role="tab"
 				>
-					<div class="flex items-center justify-center space-x-1.5">
+					<div class="flex items-center justify-center gap-1.5">
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
 						</svg>
@@ -141,7 +141,7 @@
 					:aria-selected="uiStore.mobileActiveTab === 'cart'"
 					role="tab"
 				>
-					<div class="flex items-center justify-center space-x-1.5">
+					<div class="flex items-center justify-center gap-1.5">
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
 						</svg>
@@ -463,7 +463,7 @@
 				</div>
 			</template>
 			<template #actions>
-				<div class="flex space-x-2 w-full">
+				<div class="flex gap-2 w-full">
 					<Button class="flex-1" variant="subtle" @click="uiStore.showClearCartDialog = false">
 						{{ __('Cancel') }}
 					</Button>
@@ -505,7 +505,7 @@
 							:disabled="session.logout.loading"
 							class="w-full flex items-center justify-center px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-[background,box-shadow,opacity,transform] duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
 						>
-							<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<svg class="w-5 h-5 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
 							</svg>
 							{{ __('Close Shift & Sign Out') }}
@@ -562,7 +562,7 @@
 						>
 							<span v-if="!session.logout.loading">{{ __('Sign Out') }}</span>
 							<span v-else class="flex items-center justify-center">
-								<svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+								<svg class="animate-spin h-5 w-5 me-2" fill="none" viewBox="0 0 24 24">
 									<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
 									<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 								</svg>
@@ -595,7 +595,7 @@
 				</div>
 			</template>
 			<template #actions>
-				<div class="flex space-x-2">
+				<div class="flex gap-2">
 					<Button variant="subtle" @click="uiStore.showSuccessDialog = false">
 						{{ __('Close') }}
 					</Button>
@@ -632,7 +632,7 @@
 						{{ __('Delete Invoice') }}
 					</Button>
 					<div v-else></div>
-					<div class="flex space-x-2">
+					<div class="flex gap-2">
 						<Button variant="subtle" @click="uiStore.clearError()">
 							{{ __('Close') }}
 						</Button>

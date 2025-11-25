@@ -19,7 +19,7 @@
 			<!-- Main Header Content -->
 			<div class="flex-1 flex justify-between items-center gap-1 sm:gap-2 px-2 sm:px-4 md:px-6">
 				<!-- Left Side: Brand Info -->
-				<div class="flex items-center space-x-1 sm:space-x-4 min-w-0 flex-1 overflow-hidden">
+				<div class="flex items-center gap-1 sm:gap-4 min-w-0 flex-1 overflow-hidden">
 					<div class="min-w-0 flex-shrink overflow-hidden">
 						<div class="flex items-center gap-1 sm:gap-2">
 							<h1 class="text-xs sm:text-base font-bold text-gray-900 truncate flex-shrink">{{ __('POS Next') }}</h1>
@@ -32,7 +32,7 @@
 					</div>
 
 					<!-- Time and Shift Duration - Compact on mobile -->
-					<div class="hidden lg:flex items-center space-x-4 ml-6 flex-shrink-0">
+					<div class="hidden lg:flex items-center gap-4 ms-6 flex-shrink-0">
 						<!-- Current Time -->
 						<StatusBadge
 							variant="blue"
@@ -53,13 +53,13 @@
 					</div>
 
 					<!-- Mobile Time Display - Very compact -->
-					<div class="flex lg:hidden items-center text-[10px] text-gray-600 font-medium flex-shrink-0 ml-1">
+					<div class="flex lg:hidden items-center text-[10px] text-gray-600 font-medium flex-shrink-0 ms-1">
 						<span class="hidden xs:inline whitespace-nowrap">{{ currentTime }}</span>
 					</div>
 				</div>
 
 				<!-- Right Side: Controls -->
-				<div class="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+				<div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
 					<!-- WiFi/Offline Status -->
 					<button
 						@click="$emit('sync-click')"
@@ -210,12 +210,12 @@
 						:aria-label="isRefreshing ? __('Refreshing items...') : __('Refresh items list')"
 					/>
 
-					<div class="w-px h-4 sm:h-6 bg-gray-200 mx-0.5 sm:mx-2"></div>
+					<div class="w-px h-4 sm:h-6 bg-gray-200"></div>
 
 					<!-- Language Switcher -->
 					<LanguageSwitcher />
 
-					<div class="w-px h-4 sm:h-6 bg-gray-200 mx-0.5 sm:mx-2"></div>
+					<div class="w-px h-4 sm:h-6 bg-gray-200"></div>
 
 					<!-- User Menu -->
 					<UserMenu

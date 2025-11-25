@@ -2,11 +2,11 @@
 	<div class="flex flex-col h-full bg-gray-50">
 		<!-- Item Groups Filter Tabs -->
 		<div class="px-1.5 sm:px-3 pt-1.5 sm:pt-3 pb-1.5 sm:pb-2 bg-white border-b border-gray-200">
-			<div class="flex items-center space-x-1 sm:space-x-2 overflow-x-auto pb-1 scrollbar-hide snap-x snap-mandatory">
+			<div class="flex items-center gap-1 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide snap-x snap-mandatory">
 				<button
 					@click="itemStore.setSelectedItemGroup(null)"
 					:class="[
-						'flex items-center space-x-1 sm:space-x-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-medium whitespace-nowrap transition-[background-color,border-color] duration-75 touch-manipulation snap-start flex-shrink-0',
+						'flex items-center px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-medium whitespace-nowrap transition-[background-color,border-color] duration-75 touch-manipulation snap-start flex-shrink-0',
 						!selectedItemGroup
 							? 'bg-blue-50 text-blue-600 border-2 border-blue-500 shadow-sm'
 							: 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 active:bg-gray-100',
@@ -22,7 +22,7 @@
 					:key="group.item_group"
 					@click="itemStore.setSelectedItemGroup(group.item_group)"
 					:class="[
-						'flex items-center space-x-1 sm:space-x-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-medium whitespace-nowrap transition-[background-color,border-color] duration-75 touch-manipulation snap-start flex-shrink-0',
+						'flex items-center px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-medium whitespace-nowrap transition-[background-color,border-color] duration-75 touch-manipulation snap-start flex-shrink-0',
 						selectedItemGroup === group.item_group
 							? 'bg-blue-50 text-blue-600 border-2 border-blue-500 shadow-sm'
 							: 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 active:bg-gray-100',
@@ -35,7 +35,7 @@
 
 		<!-- Cache Sync Indicator -->
 		<div v-if="cacheSyncing" class="px-1.5 sm:px-3 py-1 bg-blue-50 border-b border-blue-200">
-			<div class="flex items-center justify-center space-x-2 text-[10px] sm:text-xs text-blue-700">
+			<div class="flex items-center justify-center gap-2 text-[10px] sm:text-xs text-blue-700">
 				<div class="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
 				<span>{{ __('Syncing catalog in background... {0} items cached', [cacheStats.items]) }}</span>
 			</div>
@@ -43,10 +43,10 @@
 
 		<!-- Search Bar with Barcode Scanner and View Controls -->
 		<div class="px-1.5 sm:px-3 py-1.5 sm:py-2 bg-white border-b border-gray-200">
-			<div class="flex items-center space-x-1 sm:space-x-2">
+			<div class="flex items-center gap-1 sm:gap-2">
 				<div class="flex-1 relative min-w-0">
 					<!-- Search Icon -->
-					<div class="absolute inset-y-0 left-0 pl-2 sm:pl-3 flex items-center pointer-events-none">
+					<div class="absolute inset-y-0 start-0 ps-2 sm:ps-3 flex items-center pointer-events-none">
 						<svg
 							class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-400"
 							fill="none"
@@ -72,7 +72,7 @@
 						type="text"
 						:placeholder="searchPlaceholder"
 						:class="[
-							'w-full text-[11px] sm:text-sm border rounded-lg px-2 sm:px-3 py-2 pl-7 sm:pl-10 pr-16 sm:pr-24 focus:outline-none transition-all',
+							'w-full text-[11px] sm:text-sm border rounded-lg px-2 sm:px-3 py-2 ps-7 sm:ps-10 pe-16 sm:pe-24 focus:outline-none transition-all',
 							autoAddEnabled
 								? 'border-blue-400 bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
 								: scannerEnabled
@@ -82,7 +82,7 @@
 						:aria-label="__('Search items')"
 					/>
 					<!-- Barcode Scan Icon and Auto-Add Toggle -->
-					<div class="absolute inset-y-0 right-0 pr-1 sm:pr-2 flex items-center gap-0.5">
+					<div class="absolute inset-y-0 end-0 pe-1 sm:pe-2 flex items-center gap-0.5">
 						<button
 							@click="toggleBarcodeScanner"
 							:class="[
@@ -116,7 +116,7 @@
 						</button>
 					</div>
 				</div>
-				<div class="flex items-center space-x-0.5 bg-gray-100 rounded-lg p-0.5 flex-shrink-0">
+				<div class="flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5 flex-shrink-0">
 					<button
 						@click="setViewMode('grid')"
 						:class="[
@@ -411,7 +411,7 @@
 							filteredItems.length
 						]) }}
 					</div>
-					<div class="flex items-center space-x-1 order-1 sm:order-2">
+					<div class="flex items-center gap-1 order-1 sm:order-2">
 						<button
 							@click="goToPage(1)"
 							:disabled="currentPage === 1"
@@ -440,7 +440,7 @@
 							<span class="hidden xs:inline">{{ __('Previous') }}</span>
 							<span class="xs:hidden">‹</span>
 						</button>
-						<div class="flex items-center space-x-0.5 sm:space-x-1">
+						<div class="flex items-center gap-0.5 sm:gap-1">
 							<button
 								v-for="page in getPaginationRange()"
 								:key="page"
@@ -499,12 +499,12 @@
 				<table v-if="paginatedItems.length > 0" class="min-w-full divide-y divide-gray-200">
 					<thead class="bg-gray-50 sticky top-0 z-10">
 						<tr>
-							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-left text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 w-[50px] sm:w-[60px]">{{ __('Image') }}</th>
-							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-left text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 max-w-[120px] sm:max-w-[180px] md:max-w-[200px]">{{ __('Name') }}</th>
-							<th scope="col" class="hidden sm:table-cell px-2 sm:px-3 py-2 sm:py-2.5 text-left text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 sm:max-w-[150px]">{{ __('Code') }}</th>
-							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-left text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 w-[70px] sm:w-[100px]">{{ __('Rate') }}</th>
-							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-left text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 w-[70px] sm:w-[100px]">{{ __('Qty') }}</th>
-							<th scope="col" class="hidden md:table-cell px-2 sm:px-3 py-2 sm:py-2.5 text-left text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 md:w-[80px]">{{ __('UOM') }}</th>
+							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-start text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 w-[50px] sm:w-[60px]">{{ __('Image') }}</th>
+							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-start text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 max-w-[120px] sm:max-w-[180px] md:max-w-[200px]">{{ __('Name') }}</th>
+							<th scope="col" class="hidden sm:table-cell px-2 sm:px-3 py-2 sm:py-2.5 text-start text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 sm:max-w-[150px]">{{ __('Code') }}</th>
+							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-start text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 w-[70px] sm:w-[100px]">{{ __('Rate') }}</th>
+							<th scope="col" class="px-2 sm:px-3 py-2 sm:py-2.5 text-start text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 w-[70px] sm:w-[100px]">{{ __('Qty') }}</th>
+							<th scope="col" class="hidden md:table-cell px-2 sm:px-3 py-2 sm:py-2.5 text-start text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider bg-gray-50 border-b-2 border-gray-200 sticky top-0 z-10 md:w-[80px]">{{ __('UOM') }}</th>
 						</tr>
 					</thead>
 					<tbody class="bg-white divide-y divide-gray-200">
@@ -638,7 +638,7 @@
 							filteredItems.length
 						]) }}
 					</div>
-					<div class="flex items-center space-x-1 order-1 sm:order-2">
+					<div class="flex items-center gap-1 order-1 sm:order-2">
 						<button
 							@click="goToPage(1)"
 							:disabled="currentPage === 1"
@@ -667,7 +667,7 @@
 							<span class="hidden xs:inline">{{ __('Previous') }}</span>
 							<span class="xs:hidden">‹</span>
 						</button>
-						<div class="flex items-center space-x-0.5 sm:space-x-1">
+						<div class="flex items-center gap-0.5 sm:gap-1">
 							<button
 								v-for="page in getPaginationRange()"
 								:key="page"
