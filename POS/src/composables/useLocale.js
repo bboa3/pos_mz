@@ -112,8 +112,9 @@ export function useLocale() {
 				locale: newLocale,
 			})
 
-			// Fetch new translations for the selected language
-			fetchTranslations()
+			// Reload the page to apply new translations
+			// This ensures all components re-render with the new language
+			window.location.reload()
 		} catch (error) {
 			console.error("Failed to save language preference to Frappe:", error)
 		}
