@@ -128,11 +128,13 @@
 						<div
 							v-if="showCacheTooltip"
 							@mousedown.prevent
-							class="absolute top-full start-1/2 -translate-x-1/2 mt-2 z-[999] w-[90vw] max-w-[240px] sm:max-w-[260px]"
+							class="absolute top-full mt-2 z-[999] w-[90vw] max-w-[240px] sm:max-w-[260px]"
+							:style="{ left: '50%', transform: 'translateX(-50%)' }"
 						>
 							<div class="bg-gray-900 text-white text-xs rounded-lg shadow-xl py-2 px-2.5 sm:px-3">
 								<!-- Arrow -->
-								<div class="absolute bottom-full start-1/2 -translate-x-1/2 mb-px">
+								<div class="absolute bottom-full mb-px left-1/2 -translate-x-1/2"
+								>
 									<div class="border-[5px] sm:border-4 border-transparent border-b-gray-900"></div>
 								</div>
 
@@ -145,7 +147,7 @@
 								</div>
 
 								<!-- Stats -->
-								<div class="flex flex-col gap-1 sm:flex flex-col gap-1.5 text-[10px] sm:text-xs">
+								<div class="flex flex-col gap-1 sm:gap-1.5 text-[10px] sm:text-xs">
 									<div class="flex items-center justify-between">
 										<span class="text-gray-400">{{ __('Items:') }}</span>
 										<span class="font-semibold">{{ cacheStats?.items || 0 }}</span>
