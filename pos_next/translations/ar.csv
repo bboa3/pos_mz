@@ -367,7 +367,7 @@
 "{0} selected","{0} محدد",""
 "Please add items to cart before proceeding to payment","يرجى إضافة منتجات للسلة قبل المتابعة للدفع",""
 "Please select a customer before proceeding","يرجى اختيار عميل قبل المتابعة",""
-"Invoice saved and will sync when online","تم حفظ الفاتورة وستتم مزامنتها عند الاتصال",""
+"Invoice saved offline. Will sync when online","تم حفظ الفاتورة في وضع عدم الاتصال. ستتم المزامنة عند الاتصال",""
 "Unknown","غير معروف",""
 "Invoice {0} created and sent to printer","تم إنشاء الفاتورة {0} وإرسالها للطابعة",""
 "Invoice {0} created but print failed","تم إنشاء الفاتورة {0} لكن فشلت الطباعة",""

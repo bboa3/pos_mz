@@ -1,11 +1,18 @@
 import { ref, computed, onMounted } from "vue"
 import { translationVersion } from "../utils/translation"
 import { call } from "../utils/apiWrapper"
+import { offlineState } from "../utils/offline/offlineState"
+import { logger } from "../utils/logger"
+
+const log = logger.create("Locale")
 
 // Reactive locale state (shared across all components)
 const currentLocale = ref("en")
 const currentDir = ref("ltr")
 const PREFARED_LANGUAGE_KEY = "pos_next_language"
+
+/** Track if initial language fetch from server has been attempted */
+let serverLanguageFetched = false
 
 // Get flag URL from flagcdn.com
 function getFlagUrl(countryCode) {
@@ -36,10 +43,28 @@ export const SUPPORTED_LOCALES = {
 }
 
 /**
- * Detect current language from Frappe boot, localStorage, or browser
+ * Fetch user's language preference from the server
+ * @returns {Promise<string|null>} Language code or null if fetch fails
+ */
+async function fetchLanguageFromServer() {
+	try {
+		const response = await call("pos_next.api.localization.get_user_language", {})
+		if (response?.locale && SUPPORTED_LOCALES[response.locale]) {
+			log.info(`Fetched language from server: ${response.locale}`)
+			return response.locale
+		}
+	} catch (error) {
+		log.warn("Failed to fetch language from server", error)
+	}
+	return null
+}
+
+/**
+ * Detect current language from cache sources (when offline)
+ * Priority: Frappe boot → localStorage → browser → default
  * @returns {string} Language code
  */
-function detectLanguage() {
+function detectCachedLanguage() {
 	// 1. Check Frappe boot data (user's saved preference)
 	if (typeof window !== "undefined" && window.frappe?.boot?.lang) {
 		const lang = window.frappe.boot.lang.toLowerCase()
@@ -134,25 +159,47 @@ export function useLocale() {
 	}
 
 	/**
-	 * Initialize locale on component mount
-	 * Detects language and applies document attributes
+	 * Apply locale to document and reactive state
+	 * @param {string} locale - Language code to apply
 	 */
-	function initLocale() {
-		const detected = detectLanguage()
-		currentLocale.value = detected
+	function applyLocale(locale) {
+		const config = SUPPORTED_LOCALES[locale]
+		if (!config) return
 
-		const config = SUPPORTED_LOCALES[detected]
+		currentLocale.value = locale
 		currentDir.value = config.dir
 
 		// Set document attributes
 		if (typeof document !== "undefined") {
 			document.documentElement.setAttribute("dir", config.dir)
-			document.documentElement.setAttribute("lang", detected)
+			document.documentElement.setAttribute("lang", locale)
 
 			if (config.dir === "rtl") {
 				document.documentElement.classList.add("rtl")
 			} else {
 				document.documentElement.classList.remove("rtl")
+			}
+		}
+	}
+
+	/**
+	 * Initialize locale on component mount
+	 * When online, fetches language from server; when offline, uses cache
+	 */
+	async function initLocale() {
+		// First, apply cached language immediately (prevents flicker)
+		const cachedLocale = detectCachedLanguage()
+		applyLocale(cachedLocale)
+
+		// If online and haven't fetched from server yet, get server language
+		if (!offlineState.isOffline && !serverLanguageFetched) {
+			serverLanguageFetched = true
+			const serverLocale = await fetchLanguageFromServer()
+
+			// If server returned a different language, switch to it
+			if (serverLocale && serverLocale !== cachedLocale) {
+				log.info(`Server language (${serverLocale}) differs from cached (${cachedLocale}), switching`)
+				await changeLocale(serverLocale)
 			}
 		}
 	}

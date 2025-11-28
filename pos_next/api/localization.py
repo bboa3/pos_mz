@@ -6,6 +6,30 @@ import frappe
 
 
 @frappe.whitelist()
+def get_user_language():
+	"""
+	Get the language preference for the current user.
+
+	Returns:
+		dict: User's language preference
+
+	Security checks:
+	- User must be authenticated (not Guest)
+	"""
+	# Check if user is authenticated
+	if frappe.session.user == "Guest":
+		frappe.throw("Authentication required", frappe.AuthenticationError)
+
+	# Get user's language preference
+	language = frappe.db.get_value("User", frappe.session.user, "language") or "en"
+
+	return {
+		"success": True,
+		"locale": language.lower()
+	}
+
+
+@frappe.whitelist()
 def change_user_language(locale):
 	"""
 	Change the language preference for the current user.
