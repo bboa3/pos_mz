@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model="show"
-		:options="{ title: 'Invoice Details', size: '3xl' }"
+		:options="{ title: __('Invoice Details'), size: '5xl' }"
 	>
 		<template #body-content>
 			<div v-if="loading" class="text-center py-12">
@@ -11,11 +11,11 @@
 
 			<div v-else-if="invoiceData" class="flex flex-col gap-6">
 				<!-- Invoice Header -->
-				<div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-5 border border-indigo-100">
-					<div class="flex items-start justify-between">
+				<div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-4 md:p-5 border border-indigo-100">
+					<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
 						<div class="flex-1">
-							<div class="flex items-center gap-3 mb-2">
-								<h3 class="text-xl font-bold text-gray-900">{{ invoiceData.name }}</h3>
+							<div class="flex items-center gap-3 mb-2 flex-wrap">
+								<h3 class="text-lg md:text-xl font-bold text-gray-900">{{ invoiceData.name }}</h3>
 								<span
 									v-if="invoiceData.is_return"
 									class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
@@ -26,30 +26,30 @@
 									v-else
 									:class="[
 										'px-3 py-1 text-xs font-semibold rounded-full',
-										getStatusClass(invoiceData.status)
+										getInvoiceStatusColor(invoiceData)
 									]"
 								>
-									{{ invoiceData.status }}
+									{{ __(invoiceData.status) }}
 								</span>
 							</div>
-							<div class="grid grid-cols-2 gap-3 text-sm">
-								<div>
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+								<div class="text-start">
 									<span class="text-gray-600">{{ __('Customer:') }}</span>
 									<span class="ms-2 font-semibold text-gray-900">{{ invoiceData.customer_name || invoiceData.customer }}</span>
 								</div>
-								<div>
+								<div class="text-start">
 									<span class="text-gray-600">{{ __('Date:') }}</span>
 									<span class="ms-2 font-medium text-gray-900">{{ formatDate(invoiceData.posting_date) }} {{ formatTime(invoiceData.posting_time) }}</span>
 								</div>
-								<div v-if="invoiceData.return_against">
+								<div v-if="invoiceData.return_against" class="text-start">
 									<span class="text-gray-600">{{ __('Return Against:') }}</span>
 									<span class="ms-2 font-medium text-gray-900">{{ invoiceData.return_against }}</span>
 								</div>
 							</div>
 						</div>
-						<div class="text-end ms-4">
+						<div class="text-start sm:text-end">
 							<div class="text-xs text-gray-500 mb-1">{{ __('Grand Total') }}</div>
-							<div class="text-2xl font-bold text-indigo-600">
+							<div class="text-xl md:text-2xl font-bold text-indigo-600">
 								{{ formatCurrency(invoiceData.grand_total) }}
 							</div>
 						</div>
@@ -64,29 +64,65 @@
 						</svg>
 						{{ __('Items') }}
 					</h4>
-					<div class="border border-gray-200 rounded-lg overflow-hidden">
+					<!-- Mobile Cards View -->
+					<div class="md:hidden flex flex-col gap-3">
+						<div
+							v-for="(item, idx) in invoiceData.items"
+							:key="idx"
+							class="bg-white border border-gray-200 rounded-lg p-3"
+						>
+							<!-- Item Name & Amount Row -->
+							<div class="flex items-center justify-between gap-3 mb-2">
+								<div class="flex-1 min-w-0 text-center">
+									<div class="text-sm font-semibold text-gray-900">{{ item.item_name }}</div>
+									<div class="text-xs text-gray-500">{{ item.item_code }}</div>
+								</div>
+							</div>
+							<!-- Details Grid -->
+							<div class="grid grid-cols-3 gap-2 text-center border-t border-gray-100 pt-2">
+								<div>
+									<div class="text-xs text-gray-500">{{ __('Qty') }}</div>
+									<div class="text-sm font-medium text-gray-900">{{ item.qty }}</div>
+								</div>
+								<div>
+									<div class="text-xs text-gray-500">{{ __('Rate') }}</div>
+									<div class="text-sm font-medium text-gray-900">{{ formatCurrency(item.rate) }}</div>
+								</div>
+								<div>
+									<div class="text-xs text-gray-500">{{ __('Amount') }}</div>
+									<div class="text-sm font-semibold text-gray-900">{{ formatCurrency(item.amount) }}</div>
+								</div>
+							</div>
+							<!-- Discount Row (if applicable) -->
+							<div v-if="item.discount_percentage" class="text-center text-xs text-orange-600 mt-2 pt-2 border-t border-gray-100">
+								{{ __('Discount:') }} {{ item.discount_percentage }}%
+							</div>
+						</div>
+					</div>
+					<!-- Desktop Table View -->
+					<div class="hidden md:block border border-gray-200 rounded-lg overflow-hidden">
 						<table class="min-w-full divide-y divide-gray-200">
 							<thead class="bg-gray-50">
 								<tr>
-									<th class="px-4 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Item') }}</th>
-									<th class="px-4 py-3 text-end text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Qty') }}</th>
-									<th class="px-4 py-3 text-end text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Rate') }}</th>
-									<th class="px-4 py-3 text-end text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Discount') }}</th>
-									<th class="px-4 py-3 text-end text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Amount') }}</th>
+									<th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Item') }}</th>
+									<th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Qty') }}</th>
+									<th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Rate') }}</th>
+									<th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Discount') }}</th>
+									<th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('Amount') }}</th>
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200">
 								<tr v-for="(item, idx) in invoiceData.items" :key="idx" class="hover:bg-gray-50">
-									<td class="px-4 py-3">
+									<td class="px-4 py-3 text-center">
 										<div class="text-sm font-medium text-gray-900">{{ item.item_name }}</div>
 										<div class="text-xs text-gray-500">{{ item.item_code }}</div>
 									</td>
-									<td class="px-4 py-3 text-end text-sm text-gray-900">{{ item.qty }}</td>
-									<td class="px-4 py-3 text-end text-sm text-gray-900">{{ formatCurrency(item.rate) }}</td>
-									<td class="px-4 py-3 text-end text-sm text-gray-600">
+									<td class="px-4 py-3 text-center text-sm text-gray-900">{{ item.qty }}</td>
+									<td class="px-4 py-3 text-center text-sm text-gray-900">{{ formatCurrency(item.rate) }}</td>
+									<td class="px-4 py-3 text-center text-sm text-gray-600">
 										{{ item.discount_percentage ? `${item.discount_percentage}%` : '-' }}
 									</td>
-									<td class="px-4 py-3 text-end text-sm font-semibold text-gray-900">{{ formatCurrency(item.amount) }}</td>
+									<td class="px-4 py-3 text-center text-sm font-semibold text-gray-900">{{ formatCurrency(item.amount) }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -94,7 +130,7 @@
 				</div>
 
 				<!-- Totals Section -->
-				<div class="grid grid-cols-2 gap-6">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 					<!-- Payment Info -->
 					<div v-if="invoiceData.payments && invoiceData.payments.length > 0">
 						<h4 class="text-sm font-semibold text-gray-700 mb-3 flex items-center">
@@ -109,7 +145,7 @@
 								:key="idx"
 								class="flex justify-between items-center p-3 bg-green-50 border border-green-200 rounded-lg"
 							>
-								<div>
+								<div class="text-start">
 									<div class="text-sm font-medium text-gray-900">{{ payment.mode_of_payment }}</div>
 									<div v-if="payment.account" class="text-xs text-gray-500">{{ payment.account }}</div>
 								</div>
@@ -120,7 +156,7 @@
 
 					<!-- Summary -->
 					<div>
-						<h4 class="text-sm font-semibold text-gray-700 mb-3">{{ __('Summary') }}</h4>
+						<h4 class="text-sm font-semibold text-gray-700 mb-3 text-start">{{ __('Summary') }}</h4>
 						<div class="flex flex-col gap-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
 							<div class="flex justify-between text-sm">
 								<span class="text-gray-600">{{ __('Net Total:') }}</span>
@@ -152,8 +188,8 @@
 
 				<!-- Additional Info -->
 				<div v-if="invoiceData.remarks" class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-					<h4 class="text-sm font-semibold text-gray-700 mb-2">{{ __('Remarks') }}</h4>
-					<p class="text-sm text-gray-600">{{ invoiceData.remarks }}</p>
+					<h4 class="text-sm font-semibold text-gray-700 mb-2 text-start">{{ __('Remarks') }}</h4>
+					<p class="text-sm text-gray-600 text-start">{{ invoiceData.remarks }}</p>
 				</div>
 			</div>
 
@@ -184,18 +220,28 @@
 
 <script setup>
 import { useFormatters } from "@/composables/useFormatters"
+import { formatCurrency as formatCurrencyUtil } from "@/utils/currency"
+import { getInvoiceStatusColor } from "@/utils/invoice"
 import { logger } from "@/utils/logger"
 import { Button, Dialog, call } from "frappe-ui"
 import { ref, watch, nextTick } from "vue"
 
 const log = logger.create('InvoiceDetailDialog')
-const { formatCurrency, formatDate, formatTime } = useFormatters()
+const { formatDate, formatTime } = useFormatters()
 
 const props = defineProps({
 	modelValue: Boolean,
 	invoiceName: String,
 	posProfile: String,
+	currency: {
+		type: String,
+		default: "USD",
+	},
 })
+
+function formatCurrency(amount) {
+	return formatCurrencyUtil(Number.parseFloat(amount || 0), props.currency)
+}
 
 const emit = defineEmits(["update:modelValue", "print-invoice"])
 
@@ -246,26 +292,6 @@ async function loadInvoiceDetails() {
 		invoiceData.value = null
 	} finally {
 		loading.value = false
-	}
-}
-
-function getStatusClass(status) {
-	switch (status) {
-		case "Paid":
-			return "bg-green-100 text-green-800"
-		case "Unpaid":
-			return "bg-yellow-100 text-yellow-800"
-		case "Partly Paid":
-		case "Overdue":
-			return "bg-orange-100 text-orange-800"
-		case "Return":
-			return "bg-red-100 text-red-800"
-		case "Draft":
-			return "bg-gray-100 text-gray-800"
-		case "Cancelled":
-			return "bg-red-100 text-red-800"
-		default:
-			return "bg-gray-100 text-gray-800"
 	}
 }
 

@@ -449,6 +449,7 @@
 			v-model="showInvoiceDetail"
 			:invoice-name="selectedInvoiceForView"
 			:pos-profile="shiftStore.profileName"
+			:currency="shiftStore.profileCurrency"
 			@print-invoice="handlePrintInvoice"
 		/>
 
