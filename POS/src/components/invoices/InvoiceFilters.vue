@@ -363,7 +363,7 @@ function deleteSavedFilter(name) {
 
 .search-icon {
 	position: absolute;
-	left: 1rem;
+	inset-inline-start: 1rem;
 	width: 1.25rem;
 	height: 1.25rem;
 	color: #9ca3af;
@@ -372,7 +372,8 @@ function deleteSavedFilter(name) {
 
 .search-input {
 	width: 100%;
-	padding: 0.875rem 3rem 0.875rem 3rem;
+	padding-block: 0.875rem;
+	padding-inline: 3rem;
 	border: 2px solid #e5e7eb;
 	border-radius: 12px;
 	font-size: 0.9375rem;
@@ -389,7 +390,7 @@ function deleteSavedFilter(name) {
 
 .clear-search {
 	position: absolute;
-	right: 0.75rem;
+	inset-inline-end: 0.75rem;
 	padding: 0.375rem;
 	background: transparent;
 	border: none;

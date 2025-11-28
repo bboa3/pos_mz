@@ -344,7 +344,7 @@ onUnmounted(() => {
 
 .input-icon {
 	position: absolute;
-	left: 0.75rem;
+	inset-inline-start: 0.75rem;
 	width: 1rem;
 	height: 1rem;
 	color: #6b7280;
@@ -353,7 +353,9 @@ onUnmounted(() => {
 
 .select-input {
 	width: 100%;
-	padding: 0.625rem 5rem 0.625rem 0.75rem;
+	padding: 0.625rem;
+	padding-inline-start: 0.75rem;
+	padding-inline-end: 5rem;
 	border: 1px solid #d1d5db;
 	border-radius: 8px;
 	font-size: 0.875rem;
@@ -363,7 +365,7 @@ onUnmounted(() => {
 }
 
 .select-input.has-icon {
-	padding-left: 2.5rem;
+	padding-inline-start: 2.5rem;
 }
 
 .select-input:focus {
@@ -379,7 +381,7 @@ onUnmounted(() => {
 
 .input-actions {
 	position: absolute;
-	right: 0.5rem;
+	inset-inline-end: 0.5rem;
 	display: flex;
 	align-items: center;
 	gap: 0.25rem;
@@ -414,8 +416,8 @@ onUnmounted(() => {
 .dropdown-menu {
 	position: absolute;
 	top: calc(100% + 0.5rem);
-	left: 0;
-	right: 0;
+	inset-inline-start: 0;
+	inset-inline-end: 0;
 	max-height: 320px;
 	background: white;
 	border: 1px solid #e5e7eb;
@@ -487,7 +489,7 @@ onUnmounted(() => {
 	padding: 0.75rem 1rem;
 	border: none;
 	background: white;
-	text-align: left;
+	text-align: start;
 	cursor: pointer;
 	transition: all 0.15s;
 	border-bottom: 1px solid #f3f4f6;

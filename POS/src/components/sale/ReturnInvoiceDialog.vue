@@ -12,13 +12,23 @@
 					</label>
 
 					<!-- Search/Filter Input -->
-					<div class="mb-3">
+					<div class="mb-3 flex gap-2">
 						<Input
 							v-model="invoiceListFilter"
 							type="text"
 							:placeholder="__('Search by invoice number or customer name...')"
-							class="w-full"
+							class="flex-1"
 						/>
+						<Button
+							variant="subtle"
+							@click="loadInvoicesResource.reload()"
+							:loading="loadInvoicesResource.loading"
+							:title="__('Refresh')"
+						>
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+							</svg>
+						</Button>
 					</div>
 
 					<!-- Loading State -->
@@ -36,16 +46,20 @@
 							class="bg-white border border-gray-200 rounded-lg p-3 hover:border-blue-400 hover:bg-blue-50/30 cursor-pointer transition-all"
 						>
 							<div class="flex items-start justify-between gap-3">
-								<div class="flex-1 flex items-center gap-2 flex-wrap">
-									<h4 class="text-sm font-bold text-gray-900">{{ invoice.name }}</h4>
-									<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 whitespace-nowrap">
-										{{ invoice.status }}
-									</span>
+								<!-- Invoice Info (Start Side) -->
+								<div class="flex-1 min-w-0">
+									<div class="flex items-center gap-2 flex-wrap">
+										<h4 class="text-sm font-bold text-gray-900">{{ invoice.name }}</h4>
+										<span :class="['px-2 py-0.5 text-xs font-semibold rounded-full whitespace-nowrap', getInvoiceStatusColor(invoice)]">
+											{{ __(invoice.status) }}
+										</span>
+									</div>
+									<p class="text-xs text-gray-600 mt-1 text-start">{{ invoice.customer_name }}</p>
+									<p class="text-xs text-gray-500 text-start">{{ formatDate(invoice.posting_date) }}</p>
 								</div>
-								<div class="text-center">
+								<!-- Amount (End Side) -->
+								<div class="text-end flex-shrink-0">
 									<p class="text-sm font-bold text-gray-900">{{ formatCurrency(invoice.grand_total) }}</p>
-									<p class="text-xs text-gray-600 mt-1">{{ invoice.customer_name }}</p>
-									<p class="text-xs text-gray-500">{{ formatDate(invoice.posting_date) }}</p>
 								</div>
 							</div>
 						</div>
@@ -82,8 +96,8 @@
 								<h3 class="text-base font-bold text-gray-900">
 									{{ originalInvoice.name }}
 								</h3>
-								<span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-									{{ originalInvoice.status }}
+								<span :class="['inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full', getInvoiceStatusColor(originalInvoice)]">
+									{{ __(originalInvoice.status) }}
 								</span>
 							</div>
 						</div>
@@ -117,8 +131,8 @@
 								<h3 class="text-base font-bold text-gray-900">
 									{{ originalInvoice.name }}
 								</h3>
-								<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-									{{ originalInvoice.status }}
+								<span :class="['px-2 py-0.5 text-xs font-semibold rounded-full', getInvoiceStatusColor(originalInvoice)]">
+									{{ __(originalInvoice.status) }}
 								</span>
 							</div>
 							<div class="mt-3 grid grid-cols-2 gap-3">
@@ -363,7 +377,7 @@
 
 											<!-- Amount Input Row -->
 											<div class="flex items-center gap-3 ps-1">
-												<label class="text-sm font-medium text-gray-600 w-20">{{ __('Amount:') }}</label>
+												<label class="text-sm font-medium text-gray-600 w-20 text-start">{{ __('Amount:') }}</label>
 												<input
 													v-model.number="payment.amount"
 													type="number"
@@ -534,6 +548,8 @@
 <script setup>
 import { useToast } from "@/composables/useToast"
 import { getPaymentIcon } from "@/utils/payment"
+import { formatCurrency as formatCurrencyUtil } from "@/utils/currency"
+import { getInvoiceStatusColor } from "@/utils/invoice"
 import { Button, Dialog, Input, createResource } from "frappe-ui"
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue"
 import TranslatedHTML from "../common/TranslatedHTML.vue"
@@ -543,6 +559,10 @@ const { showSuccess, showError, showWarning } = useToast()
 const props = defineProps({
 	modelValue: Boolean,
 	posProfile: String,
+	currency: {
+		type: String,
+		default: "USD",
+	},
 })
 
 const emit = defineEmits(["update:modelValue", "return-created"])
@@ -1080,10 +1100,7 @@ function formatDate(dateStr) {
 }
 
 function formatCurrency(amount) {
-	return new Intl.NumberFormat("en-US", {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2,
-	}).format(Number.parseFloat(amount || 0))
+	return formatCurrencyUtil(Number.parseFloat(amount || 0), props.currency)
 }
 </script>
 

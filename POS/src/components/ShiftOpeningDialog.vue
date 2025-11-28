@@ -5,7 +5,7 @@
         <!-- Step 1: Select POS Profile -->
         <div v-if="step === 1" class="flex flex-col gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2 text-start">
               {{ __('Select POS Profile') }}
             </label>
             <div v-if="profilesResource.loading" class="text-center py-4">
@@ -57,7 +57,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-3 text-start">
               {{ __('Opening Balance (Optional)') }}
             </label>
 
@@ -72,7 +72,7 @@
                 class="flex items-center justify-between p-3 border rounded-lg"
               >
                 <div class="flex-1">
-                  <label class="text-sm font-medium text-gray-700">
+                  <label class="text-sm font-medium text-gray-700 text-start">
                     {{ method.mode_of_payment }}
                   </label>
                 </div>

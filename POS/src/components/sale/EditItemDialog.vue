@@ -47,7 +47,7 @@
 					<div class="flex flex-col gap-4">
 						<!-- Quantity Control -->
 						<div>
-							<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Quantity') }}</label>
+							<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('Quantity') }}</label>
 							<!-- For serial items, quantity is read-only (controlled by serial list) -->
 							<div v-if="localItem?.has_serial_no && localSerials.length > 0" class="w-full h-10 border border-gray-300 rounded-lg bg-gray-50 flex items-center justify-center">
 								<span class="text-sm font-semibold text-gray-600">{{ localSerials.length }}</span>
@@ -57,7 +57,7 @@
 								<button
 									type="button"
 									@click="decrementQuantity"
-									class="w-[40px] h-[40px] min-w-[40px] bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold text-lg transition-colors flex items-center justify-center border-r border-gray-300"
+									class="w-[40px] h-[40px] min-w-[40px] bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold text-lg transition-colors flex items-center justify-center border-e border-gray-300"
 									style="flex: 0 0 40px;"
 								>
 									−
@@ -78,7 +78,7 @@
 								<button
 									type="button"
 									@click="incrementQuantity"
-									class="w-[40px] h-[40px] min-w-[40px] bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold text-lg transition-colors flex items-center justify-center border-l border-gray-300"
+									class="w-[40px] h-[40px] min-w-[40px] bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold text-lg transition-colors flex items-center justify-center border-s border-gray-300"
 									style="flex: 0 0 40px;"
 								>
 									+
@@ -88,7 +88,7 @@
 
 						<!-- Rate -->
 						<div>
-							<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Rate') }}</label>
+							<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('Rate') }}</label>
 							<div class="relative h-10">
 								<span class="absolute inset-y-0 start-0 ps-3 flex items-center text-gray-500 text-sm font-medium">
 									{{ currencySymbol }}
@@ -109,7 +109,7 @@
 					<div class="flex flex-col gap-4">
 						<!-- UOM Selector -->
 						<div>
-							<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('UOM') }}</label>
+							<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('UOM') }}</label>
 							<select
 								v-model="localUom"
 								@change="handleUomChange"
@@ -129,7 +129,7 @@
 
 						<!-- Warehouse Selector -->
 						<div>
-							<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Warehouse') }}</label>
+							<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('Warehouse') }}</label>
 							<select
 								v-model="localWarehouse"
 								@change="handleWarehouseChange"
@@ -154,7 +154,7 @@
 				<!-- Serial Numbers Section (only for serial items) -->
 				<div v-if="localItem?.has_serial_no && localSerials.length > 0" class="border-t border-gray-200 pt-4">
 					<div class="flex items-center justify-between mb-3">
-						<label class="block text-sm font-medium text-gray-700">
+						<label class="block text-sm font-medium text-gray-700 text-start">
 							{{ __('Serial Numbers') }}
 							<span class="ms-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
 								{{ localSerials.length }}
@@ -190,11 +190,11 @@
 
 				<!-- Item Discount Section (only if allowed by POS Profile) -->
 				<div v-if="settingsStore.allowItemDiscount" class="border-t border-gray-200 pt-4">
-					<label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Item Discount') }}</label>
+					<label class="block text-sm font-medium text-gray-700 mb-3 text-start">{{ __('Item Discount') }}</label>
 					<div class="grid grid-cols-2 gap-3">
 						<!-- Discount Type -->
 						<div>
-							<label class="block text-xs text-gray-600 mb-1">{{ __('Discount Type') }}</label>
+							<label class="block text-xs text-gray-600 mb-1 text-start">{{ __('Discount Type') }}</label>
 							<select
 								v-model="discountType"
 								@change="handleDiscountTypeChange"
@@ -206,7 +206,7 @@
 						</div>
 						<!-- Discount Value -->
 						<div>
-							<label class="block text-xs text-gray-600 mb-1">{{ discountType === 'percentage' ? __('Percentage') : __('Amount') }}</label>
+							<label class="block text-xs text-gray-600 mb-1 text-start">{{ discountType === 'percentage' ? __('Percentage') : __('Amount') }}</label>
 							<div class="relative">
 								<input
 									v-model.number="discountValue"

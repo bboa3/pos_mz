@@ -39,7 +39,7 @@
 
 					<!-- Group variants by attributes -->
 					<div v-for="(values, attrName) in variantAttributesMap" :key="attrName" class="flex flex-col gap-2">
-						<label class="text-sm font-semibold text-gray-900">{{ attrName }}</label>
+						<label class="text-sm font-semibold text-gray-900 text-start block">{{ attrName }}</label>
 						<div class="flex flex-wrap gap-2">
 							<button
 								v-for="value in values"

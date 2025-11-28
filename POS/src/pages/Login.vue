@@ -53,12 +53,12 @@
                   :type="showPassword ? 'text' : 'password'"
                   :placeholder="__('Enter your password')"
                   :disabled="session.login.loading"
-                  class="form-input block w-full border-gray-400 placeholder-gray-500 pr-10"
+                  class="form-input block w-full border-gray-400 placeholder-gray-500 pe-10"
                 />
                 <button
                   type="button"
                   @click="showPassword = !showPassword"
-                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 hover:text-gray-800 transition-colors focus:outline-none"
+                  class="absolute inset-y-0 end-0 flex items-center pe-3 text-gray-600 hover:text-gray-800 transition-colors focus:outline-none"
                   :disabled="session.login.loading"
                   tabindex="-1"
                   :aria-label="showPassword ? __('Hide password') : __('Show password')"

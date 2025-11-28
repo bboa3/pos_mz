@@ -19,7 +19,7 @@
 
 				<!-- Coupon Code Input -->
 				<div v-if="!appliedDiscount">
-					<label class="block text-sm font-medium text-gray-700 mb-2">
+					<label class="block text-sm font-medium text-gray-700 mb-2 text-start">
 						{{ __('Coupon Code') }}
 					</label>
 					<div class="flex gap-2">
@@ -37,7 +37,7 @@
 
 				<!-- My Gift Cards -->
 				<div v-if="giftCards.length > 0 && !appliedDiscount">
-					<label class="block text-sm font-medium text-gray-700 mb-2">
+					<label class="block text-sm font-medium text-gray-700 mb-2 text-start">
 						<div class="flex items-center gap-2">
 							<svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />

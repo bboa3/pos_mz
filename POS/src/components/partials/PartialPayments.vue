@@ -90,10 +90,10 @@
 												<span
 													:class="[
 														'px-2 py-0.5 text-xs font-semibold rounded-full',
-														getStatusClass(invoice.status)
+														getInvoiceStatusColor(invoice)
 													]"
 												>
-													{{ getStatusLabel(invoice.status) }}
+													{{ __(invoice.status) }}
 												</span>
 											</div>
 											<div class="flex items-center gap-4 mt-1 text-sm text-gray-600">
@@ -208,6 +208,7 @@
 
 <script setup>
 import { formatCurrency as formatCurrencyUtil } from "@/utils/currency"
+import { getInvoiceStatusColor } from "@/utils/invoice"
 import PaymentDialog from "@/components/sale/PaymentDialog.vue"
 import { usePOSSettingsStore } from "@/stores/posSettings"
 import { useToast } from "@/composables/useToast"
@@ -358,49 +359,6 @@ function getPaymentSourceLabel(source) {
 	}
 }
 
-function getStatusLabel(status) {
-	// Convert ERPNext status to user-friendly labels
-	switch (status) {
-		case 'Partly Paid':
-			return __('Partially Paid')
-		case 'Overdue':
-			return __('Overdue')
-		case 'Unpaid':
-			return __('Unpaid')
-		case 'Paid':
-			return __('Paid')
-		case 'Draft':
-			return __('Draft')
-		case 'Cancelled':
-			return __('Cancelled')
-		case 'Return':
-			return __('Return')
-		default:
-			return status
-	}
-}
-
-function getStatusClass(status) {
-	// Return appropriate CSS classes for each status
-	switch (status) {
-		case 'Partly Paid':
-			return 'bg-orange-100 text-orange-700 border border-orange-200'
-		case 'Overdue':
-			return 'bg-red-100 text-red-700 border border-red-200'
-		case 'Unpaid':
-			return 'bg-yellow-100 text-yellow-700 border border-yellow-200'
-		case 'Paid':
-			return 'bg-green-100 text-green-700 border border-green-200'
-		case 'Draft':
-			return 'bg-gray-100 text-gray-700 border border-gray-200'
-		case 'Cancelled':
-			return 'bg-gray-100 text-gray-700 border border-gray-200'
-		case 'Return':
-			return 'bg-purple-100 text-purple-700 border border-purple-200'
-		default:
-			return 'bg-gray-100 text-gray-700 border border-gray-200'
-	}
-}
 
 // Lifecycle
 onMounted(() => {

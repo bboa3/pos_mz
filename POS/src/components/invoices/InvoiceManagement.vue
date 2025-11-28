@@ -181,10 +181,10 @@
 														<span
 															:class="[
 																'px-2 py-0.5 text-xs font-semibold rounded-full',
-																getStatusClass(invoice.status)
+																getInvoiceStatusColor(invoice)
 															]"
 														>
-															{{ getStatusLabel(invoice.status) }}
+															{{ __(invoice.status) }}
 														</span>
 													</div>
 													<div class="flex items-center gap-4 mt-1 text-sm text-gray-600">
@@ -313,10 +313,10 @@
 														<span
 															:class="[
 																'text-xs px-2.5 py-1 rounded-full font-semibold',
-																getStatusClass(invoice.status)
+																getInvoiceStatusColor(invoice)
 															]"
 														>
-															{{ getStatusLabel(invoice.status) }}
+															{{ __(invoice.status) }}
 														</span>
 													</div>
 												</div>
@@ -544,6 +544,7 @@ import PaymentDialog from "@/components/sale/PaymentDialog.vue"
 import { useInvoiceFilters } from "@/composables/useInvoiceFilters"
 import { useInvoiceFiltersStore } from "@/stores/invoiceFilters"
 import { formatCurrency as formatCurrencyUtil } from "@/utils/currency"
+import { getInvoiceStatusColor } from "@/utils/invoice"
 import { useFormatters } from "@/composables/useFormatters"
 import { useToast } from "@/composables/useToast"
 import { Button, call } from "frappe-ui"
@@ -887,49 +888,6 @@ function getPaymentSourceLabel(source) {
 	}
 }
 
-function getStatusLabel(status) {
-	// Convert ERPNext status to user-friendly labels
-	switch (status) {
-		case 'Partly Paid':
-			return 'Partially Paid'
-		case 'Overdue':
-			return 'Overdue'
-		case 'Unpaid':
-			return 'Unpaid'
-		case 'Paid':
-			return 'Paid'
-		case 'Draft':
-			return 'Draft'
-		case 'Cancelled':
-			return 'Cancelled'
-		case 'Return':
-			return 'Return'
-		default:
-			return status
-	}
-}
-
-function getStatusClass(status) {
-	// Return appropriate CSS classes for each status
-	switch (status) {
-		case 'Partly Paid':
-			return 'bg-orange-100 text-orange-700 border border-orange-200'
-		case 'Overdue':
-			return 'bg-red-100 text-red-700 border border-red-200'
-		case 'Unpaid':
-			return 'bg-yellow-100 text-yellow-700 border border-yellow-200'
-		case 'Paid':
-			return 'bg-green-100 text-green-700 border border-green-200'
-		case 'Draft':
-			return 'bg-gray-100 text-gray-700 border border-gray-200'
-		case 'Cancelled':
-			return 'bg-gray-100 text-gray-700 border border-gray-200'
-		case 'Return':
-			return 'bg-purple-100 text-purple-700 border border-purple-200'
-		default:
-			return 'bg-gray-100 text-gray-700 border border-gray-200'
-	}
-}
 
 function calculateDraftTotal(items) {
 	if (!items || items.length === 0) return 0

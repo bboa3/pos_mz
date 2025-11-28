@@ -2,7 +2,7 @@
 	<!-- Split Layout matching PromotionManagement -->
 	<div class="flex-1 flex overflow-hidden">
 		<!-- LEFT SIDE: Coupon List & Navigation -->
-		<div class="w-80 flex-shrink-0 border-r bg-gray-50 flex flex-col">
+		<div class="w-80 flex-shrink-0 border-e bg-gray-50 flex flex-col">
 			<!-- Search & Filter -->
 			<div class="p-4 bg-white border-b flex flex-col gap-3">
 				<FormControl
@@ -295,7 +295,7 @@
 											required
 										/>
 										<div v-else>
-											<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Customer') }}</label>
+											<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('Customer') }}</label>
 											<div class="px-3 py-2 bg-gray-50 rounded-lg">
 												<p class="text-sm font-medium text-gray-900">{{ couponDetails.customer_name || couponDetails.customer }}</p>
 												<p class="text-xs text-gray-500">{{ couponDetails.customer }}</p>
@@ -314,7 +314,7 @@
 
 									<!-- Company field -->
 									<div>
-										<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Company') }}</label>
+										<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('Company') }}</label>
 										<div class="px-3 py-2 bg-gray-50 rounded-lg">
 											<p class="text-sm text-gray-900">{{ isCreating ? props.company : couponDetails.company }}</p>
 										</div>
@@ -322,7 +322,7 @@
 
 									<!-- Referral Code (view only when editing) -->
 									<div v-if="!isCreating && couponDetails.referral_code">
-										<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Referral Code') }}</label>
+										<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('Referral Code') }}</label>
 										<div class="px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
 											<p class="text-sm font-medium text-blue-900">{{ couponDetails.referral_code }}</p>
 										</div>
@@ -444,7 +444,7 @@
 										:placeholder="__('Unlimited')"
 									/>
 									<div v-if="!isCreating">
-										<label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Times Used') }}</label>
+										<label class="block text-sm font-medium text-gray-700 mb-2 text-start">{{ __('Times Used') }}</label>
 										<div class="px-3 py-2 bg-gray-50 rounded-lg">
 											<p class="text-lg font-bold text-gray-900">{{ couponDetails.used || 0 }}</p>
 										</div>
@@ -472,25 +472,25 @@
 								</div>
 								<div class="grid grid-cols-3 gap-4">
 									<div>
-										<label class="block text-xs font-medium text-gray-500 mb-1">{{ __('Current Status') }}</label>
+										<label class="block text-xs font-medium text-gray-500 mb-1 text-start">{{ __('Current Status') }}</label>
 										<Badge :theme="getStatusTheme(selectedCoupon.status)" variant="subtle" size="md">
 											{{ selectedCoupon.status }}
 										</Badge>
 									</div>
 									<div>
-										<label class="block text-xs font-medium text-gray-500 mb-1">{{ __('Created On') }}</label>
+										<label class="block text-xs font-medium text-gray-500 mb-1 text-start">{{ __('Created On') }}</label>
 										<p class="text-sm text-gray-900">{{ formatDate(couponDetails.creation) }}</p>
 									</div>
 									<div>
-										<label class="block text-xs font-medium text-gray-500 mb-1">{{ __('Last Modified') }}</label>
+										<label class="block text-xs font-medium text-gray-500 mb-1 text-start">{{ __('Last Modified') }}</label>
 										<p class="text-sm text-gray-900">{{ formatDate(couponDetails.modified) }}</p>
 									</div>
 									<div v-if="couponDetails.email_id">
-										<label class="block text-xs font-medium text-gray-500 mb-1">{{ __('Email') }}</label>
+										<label class="block text-xs font-medium text-gray-500 mb-1 text-start">{{ __('Email') }}</label>
 										<p class="text-sm text-gray-900">{{ couponDetails.email_id }}</p>
 									</div>
 									<div v-if="couponDetails.mobile_no">
-										<label class="block text-xs font-medium text-gray-500 mb-1">{{ __('Mobile') }}</label>
+										<label class="block text-xs font-medium text-gray-500 mb-1 text-start">{{ __('Mobile') }}</label>
 										<p class="text-sm text-gray-900">{{ couponDetails.mobile_no }}</p>
 									</div>
 								</div>

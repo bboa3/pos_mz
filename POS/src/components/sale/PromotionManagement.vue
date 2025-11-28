@@ -70,7 +70,7 @@
 						<!-- PROMOTIONS TAB -->
 						<template v-if="activeTab === 'promotions'">
 						<!-- LEFT SIDE: Promotion List & Navigation -->
-						<div class="w-80 flex-shrink-0 border-r bg-gray-50 flex flex-col">
+						<div class="w-80 flex-shrink-0 border-e bg-gray-50 flex flex-col">
 							<!-- Search & Filter -->
 							<div class="p-4 bg-white border-b flex flex-col gap-3">
 								<FormControl
@@ -515,7 +515,7 @@
 												<div class="flex flex-col gap-4">
 													<!-- Discount Type Selection -->
 													<div>
-														<label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Discount Type') }}</label>
+														<label class="block text-sm font-medium text-gray-700 mb-3 text-start">{{ __('Discount Type') }}</label>
 														<div class="grid grid-cols-3 gap-3">
 															<button
 																v-for="type in discountTypes"
@@ -550,7 +550,7 @@
 
 														<!-- Free Item Search -->
 														<div v-if="form.discount_type === 'free_item'" class="flex flex-col gap-2">
-															<label class="block text-sm font-medium text-gray-700">{{ __('Free Item') }}<span class="text-red-500"> *</span></label>
+															<label class="block text-sm font-medium text-gray-700 text-start">{{ __('Free Item') }}<span class="text-red-500"> *</span></label>
 
 															<!-- Search Input -->
 															<FormControl

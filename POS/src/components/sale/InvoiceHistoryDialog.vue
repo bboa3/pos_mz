@@ -1,12 +1,12 @@
 <template>
 	<Dialog
 		v-model="show"
-		:options="{ title: __('Invoice History'), size: 'xl' }"
+		:options="{ title: __('Invoice History'), size: '5xl' }"
 	>
 		<template #body-content>
 			<div class="flex flex-col gap-4">
 				<!-- Filters -->
-				<div class="flex items-center gap-3">
+				<div class="flex items-center gap-2">
 					<div class="flex-1">
 						<Input
 							v-model="searchTerm"
@@ -21,8 +21,15 @@
 							</template>
 						</Input>
 					</div>
-					<Button @click="loadInvoices" :loading="invoicesResource.loading">
-						{{ __('Refresh') }}
+					<Button
+						variant="subtle"
+						@click="loadInvoices"
+						:loading="invoicesResource.loading"
+						:title="__('Refresh')"
+					>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+						</svg>
 					</Button>
 				</div>
 
@@ -39,15 +46,16 @@
 					<p class="mt-2 text-sm text-gray-500">{{ __('No invoices found') }}</p>
 				</div>
 
-				<div v-else class="flex flex-col gap-2 max-h-96 overflow-y-auto">
+				<div v-else class="flex flex-col gap-2 max-h-96 overflow-y-auto pe-2">
 					<div
 						v-for="invoice in filteredInvoices"
 						:key="invoice.name"
 						class="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-md transition-all"
 					>
-						<div class="flex items-start justify-between">
-							<div class="flex-1">
-								<div class="flex items-center gap-2 mb-1">
+						<div class="flex items-start justify-between gap-3">
+							<!-- Invoice Info (Start Side) -->
+							<div class="flex-1 min-w-0">
+								<div class="flex items-center gap-2 mb-1 flex-wrap">
 									<h4 class="text-sm font-semibold text-gray-900">
 										{{ invoice.name }}
 									</h4>
@@ -63,28 +71,22 @@
 										v-else
 										:class="[
 											'text-xs px-2 py-0.5 rounded-full font-medium',
-											invoice.docstatus === 1
-												? 'bg-green-100 text-green-800'
-												: invoice.docstatus === 2
-												? 'bg-red-100 text-red-800'
-												: 'bg-gray-100 text-gray-800'
+											getInvoiceStatusColor(invoice)
 										]"
 									>
-										{{ invoice.status }}
+										{{ __(invoice.status) }}
 									</span>
 								</div>
-								<div class="flex items-center gap-4 text-xs text-gray-600">
-									<span>{{ invoice.customer_name }}</span>
-									<span>{{ formatDateTime(invoice.posting_date, invoice.posting_time) }}</span>
-									<span v-if="invoice.items_count">{{ __('{0} item(s)', [invoice.items_count]) }}</span>
-								</div>
+								<p class="text-xs text-gray-600 text-start">{{ invoice.customer_name }}</p>
+								<p class="text-xs text-gray-500 text-start">{{ formatDateTime(invoice.posting_date, invoice.posting_time) }}</p>
 							</div>
 
-							<div class="ms-4">
-								<p class="text-sm text-start font-bold text-gray-900">
+							<!-- Amount & Actions (End Side) -->
+							<div class="flex-shrink-0 flex flex-col items-end">
+								<p class="text-sm font-bold text-gray-900 text-end">
 									{{ formatCurrency(invoice.grand_total) }}
 								</p>
-								<div class="flex items-center justify-between mt-2">
+								<div class="flex items-center gap-1 mt-2">
 									<button
 										@click="viewInvoice(invoice)"
 										class="p-1.5 hover:bg-blue-50 rounded transition-colors"
@@ -138,17 +140,25 @@
 
 <script setup>
 import { useToast } from "@/composables/useToast"
-import { useFormatters } from "@/composables/useFormatters"
+import { formatCurrency as formatCurrencyUtil } from "@/utils/currency"
+import { getInvoiceStatusColor } from "@/utils/invoice"
 import { Button, Dialog, Input, createResource } from "frappe-ui"
 import { computed, ref, watch } from "vue"
 
 const { showError } = useToast()
-const { formatCurrency } = useFormatters()
 
 const props = defineProps({
 	modelValue: Boolean,
 	posProfile: String,
+	currency: {
+		type: String,
+		default: "USD",
+	},
 })
+
+function formatCurrency(amount) {
+	return formatCurrencyUtil(Number.parseFloat(amount || 0), props.currency)
+}
 
 const emit = defineEmits(["update:modelValue", "create-return", "view-invoice", "print-invoice"])
 

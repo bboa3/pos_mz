@@ -242,14 +242,14 @@
 			<button
 				v-if="!uiStore.isDesktop && uiStore.mobileActiveTab === 'items' && cartStore.itemCount > 0"
 				@click="uiStore.setMobileTab('cart')"
-				class="lg:hidden fixed bottom-20 right-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:from-blue-700 hover:to-blue-800 active:from-blue-800 active:to-blue-900 transition-[background,box-shadow,transform] duration-200 z-50 touch-manipulation active:scale-95 ring-4 ring-blue-100"
+				class="lg:hidden fixed bottom-20 end-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:from-blue-700 hover:to-blue-800 active:from-blue-800 active:to-blue-900 transition-[background,box-shadow,transform] duration-200 z-50 touch-manipulation active:scale-95 ring-4 ring-blue-100"
 				:aria-label="__('View cart with {0} items', [cartStore.itemCount])"
 			>
 				<div class="relative">
 					<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
 					</svg>
-					<span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full min-w-[22px] h-[22px] px-1 flex items-center justify-center shadow-lg animate-pulse">
+					<span class="absolute -top-2 -end-2 bg-red-500 text-white text-xs font-bold rounded-full min-w-[22px] h-[22px] px-1 flex items-center justify-center shadow-lg animate-pulse">
 						{{ cartStore.itemCount }}
 					</span>
 				</div>
@@ -330,6 +330,7 @@
 		<ReturnInvoiceDialog
 			v-model="uiStore.showReturnDialog"
 			:pos-profile="shiftStore.profileName"
+			:currency="shiftStore.profileCurrency"
 			@return-created="handleReturnCreated"
 		/>
 
@@ -385,6 +386,7 @@
 		<InvoiceHistoryDialog
 			v-model="uiStore.showHistoryDialog"
 			:pos-profile="shiftStore.profileName"
+			:currency="shiftStore.profileCurrency"
 			@create-return="handleCreateReturnFromHistory"
 			@view-invoice="handleViewInvoice"
 			@print-invoice="handlePrintInvoice"
