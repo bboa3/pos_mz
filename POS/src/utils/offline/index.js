@@ -2,8 +2,18 @@
 
 export { db, initDB, checkDBHealth, getSetting, setSetting } from "./db"
 
+// Centralized offline state manager (single source of truth)
 export {
+	offlineState,
 	isOffline,
+	setManualOffline,
+	toggleManualOffline,
+	getOfflineState,
+	checkConnectivity,
+	getConnectionQuality,
+} from "./offlineState"
+
+export {
 	pingServer,
 	saveOfflineInvoice,
 	getOfflineInvoices,
@@ -30,15 +40,13 @@ export {
 	clearCustomersCache,
 } from "./items"
 
-// New cache system exports
+// New cache system exports (excluding setManualOffline/toggleManualOffline - use offlineState instead)
 export {
 	memory,
 	initMemoryCache,
 	isCacheReady,
 	isStockCacheReady,
 	isManualOffline,
-	setManualOffline,
-	toggleManualOffline,
 	cacheItemsFromServer,
 	cacheCustomersFromServer,
 	cachePaymentMethodsFromServer,

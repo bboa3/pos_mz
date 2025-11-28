@@ -5,6 +5,8 @@
  */
 
 import { logger } from '../logger'
+import { offlineState } from './offlineState'
+
 const log = logger.create('OfflineWorker')
 
 class OfflineWorkerClient {
@@ -59,13 +61,23 @@ class OfflineWorkerClient {
 					this.serverOnline = payload.serverOnline
 					this.initAttempts = 0 // Reset on successful init
 					this.startHealthCheck()
+					// Initialize centralized offline state
+					offlineState.initialize({
+						serverOnline: payload.serverOnline,
+						manualOffline: payload.manualOffline || false
+					})
 					log.success("Offline worker ready", { serverOnline: payload.serverOnline })
 					return
 				}
 
 				if (type === "SERVER_STATUS_CHANGE") {
 					this.serverOnline = payload.serverOnline
-					// Emit custom event for status changes
+					// Update centralized offline state (handles window sync and events)
+					offlineState.updateState({
+						serverOnline: payload.serverOnline,
+						manualOffline: payload.manualOffline
+					})
+					// Also emit legacy event for backward compatibility
 					window.dispatchEvent(
 						new CustomEvent("offlineStatusChange", {
 							detail: { serverOnline: payload.serverOnline },
@@ -424,6 +436,9 @@ class OfflineWorkerClient {
 	}
 
 	async setManualOffline(value) {
+		// Update centralized offline state immediately for responsive UI
+		offlineState.setManualOffline(value)
+		// Also notify worker for persistence and sync
 		return this.sendMessage("SET_MANUAL_OFFLINE", { value })
 	}
 

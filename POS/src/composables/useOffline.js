@@ -1,26 +1,32 @@
 import { syncOfflineInvoices } from "@/utils/offline"
+import { offlineState } from "@/utils/offline/offlineState"
 import { offlineWorker } from "@/utils/offline/workerClient"
-import { computed, onMounted, onUnmounted, ref } from "vue"
+import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 
 export function useOffline() {
-	const isOffline = ref(false)
+	// Reactive state that syncs with centralized offlineState
+	const isOffline = ref(offlineState.isOffline)
 	const pendingInvoicesCount = ref(0)
 	const isSyncing = ref(false)
+	const connectionQuality = ref(offlineState.getConnectionQuality())
 
-	// Check offline status using worker
-	const updateOfflineStatus = async () => {
-		const browserOnline = navigator.onLine
-		const offline = await offlineWorker.checkOffline(browserOnline)
+	// Track previous offline state for transition detection
+	let wasOffline = offlineState.isOffline
+	let unsubscribe = null
 
-		if (isOffline.value !== offline) {
-			console.log(`Offline status changed: ${isOffline.value} -> ${offline}`)
-			isOffline.value = offline
-		}
+	// Update offline status from centralized state
+	const updateOfflineStatus = () => {
+		isOffline.value = offlineState.isOffline
+		connectionQuality.value = offlineState.getConnectionQuality()
 	}
 
 	// Update pending invoices count using worker
 	const updatePendingCount = async () => {
-		pendingInvoicesCount.value = await offlineWorker.getOfflineInvoiceCount()
+		try {
+			pendingInvoicesCount.value = await offlineWorker.getOfflineInvoiceCount()
+		} catch (error) {
+			console.error("[useOffline] Error getting pending count:", error)
+		}
 	}
 
 	// Save invoice offline using worker
@@ -30,12 +36,12 @@ export function useOffline() {
 			await updatePendingCount()
 			return true
 		} catch (error) {
-			console.error("Error saving invoice offline:", error)
+			console.error("[useOffline] Error saving invoice offline:", error)
 			throw error
 		}
 	}
 
-	// Sync pending invoices (this still needs main thread for frappe.call)
+	// Sync pending invoices
 	const syncPending = async () => {
 		if (isOffline.value) {
 			throw new Error("Cannot sync while offline")
@@ -47,7 +53,7 @@ export function useOffline() {
 			await updatePendingCount()
 			return result
 		} catch (error) {
-			console.error("Error syncing invoices:", error)
+			console.error("[useOffline] Error syncing invoices:", error)
 			throw error
 		} finally {
 			isSyncing.value = false
@@ -76,7 +82,7 @@ export function useOffline() {
 			}
 			return true
 		} catch (error) {
-			console.error("Error caching data:", error)
+			console.error("[useOffline] Error caching data:", error)
 			return false
 		}
 	}
@@ -101,47 +107,70 @@ export function useOffline() {
 		return await offlineWorker.getCacheStats()
 	}
 
-	// Event listeners
-	const handleOnline = () => {
-		updateOfflineStatus()
-		// Auto-sync when coming back online
-		syncPending().catch(console.error)
+	// Handle state changes from centralized manager
+	const handleStateChange = async (state) => {
+		const nowOffline = state.isOffline
+
+		// Update reactive refs
+		isOffline.value = nowOffline
+		connectionQuality.value = state.quality || offlineState.getConnectionQuality()
+
+		// Detect transition from offline to online
+		if (wasOffline && !nowOffline) {
+			console.log("[useOffline] Transition to online detected, syncing...")
+			try {
+				await syncPending()
+			} catch (error) {
+				console.error("[useOffline] Auto-sync failed:", error)
+			}
+		}
+
+		wasOffline = nowOffline
 	}
 
-	const handleOffline = () => {
-		updateOfflineStatus()
+	// Force immediate connectivity check
+	const checkConnectivity = async () => {
+		const state = await offlineState.checkConnectivity()
+		isOffline.value = state.isOffline
+		connectionQuality.value = state.quality
+		return state
 	}
 
-	const handleWorkerStatusChange = (event) => {
-		// Worker detected server status change
-		updateOfflineStatus()
+	// Handle invoice sync completion
+	const handleInvoicesSynced = () => {
+		console.log("[useOffline] Invoices synced event received, updating count...")
+		updatePendingCount()
 	}
 
 	onMounted(() => {
-		// Initial check
+		// Initial state sync
 		updateOfflineStatus()
 		updatePendingCount()
 
-		// Listen to online/offline events (passive for better performance)
-		window.addEventListener("online", handleOnline, { passive: true })
-		window.addEventListener("offline", handleOffline, { passive: true })
+		// Subscribe to centralized state changes
+		unsubscribe = offlineState.subscribe(handleStateChange)
 
-		// Listen to worker status changes (passive for better performance)
-		window.addEventListener("offlineStatusChange", handleWorkerStatusChange, {
+		// Listen for sync completion events
+		window.addEventListener("offlineInvoicesSynced", handleInvoicesSynced, {
 			passive: true,
 		})
 	})
 
 	onUnmounted(() => {
-		window.removeEventListener("online", handleOnline)
-		window.removeEventListener("offline", handleOffline)
-		window.removeEventListener("offlineStatusChange", handleWorkerStatusChange)
+		// Cleanup subscription
+		if (unsubscribe) {
+			unsubscribe()
+			unsubscribe = null
+		}
+
+		window.removeEventListener("offlineInvoicesSynced", handleInvoicesSynced)
 	})
 
 	return {
 		isOffline,
 		pendingInvoicesCount,
 		isSyncing,
+		connectionQuality,
 		saveInvoiceOffline,
 		syncPending,
 		getPending,
@@ -151,6 +180,7 @@ export function useOffline() {
 		searchCustomers,
 		checkCacheReady,
 		getCacheStats,
+		checkConnectivity,
 		updateOfflineStatus,
 		updatePendingCount,
 	}

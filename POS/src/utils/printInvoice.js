@@ -318,7 +318,7 @@ function printInvoiceCustom(invoiceData) {
 								(item.discount_amount &&
 									Number.parseFloat(item.discount_amount) > 0)
 							const isFree = item.is_free_item
-							const qty = item.qty || item.quantity
+							const qty = item.quantity || item.qty
 
 							// Display original list price for transparency
 							const displayRate = item.price_list_rate || item.rate

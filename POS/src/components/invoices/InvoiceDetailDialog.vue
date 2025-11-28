@@ -82,7 +82,7 @@
 							<div class="grid grid-cols-3 gap-2 text-center border-t border-gray-100 pt-2">
 								<div>
 									<div class="text-xs text-gray-500">{{ __('Qty') }}</div>
-									<div class="text-sm font-medium text-gray-900">{{ item.qty }}</div>
+									<div class="text-sm font-medium text-gray-900">{{ item.quantity }}</div>
 								</div>
 								<div>
 									<div class="text-xs text-gray-500">{{ __('Rate') }}</div>
@@ -117,7 +117,7 @@
 										<div class="text-sm font-medium text-gray-900">{{ item.item_name }}</div>
 										<div class="text-xs text-gray-500">{{ item.item_code }}</div>
 									</td>
-									<td class="px-4 py-3 text-center text-sm text-gray-900">{{ item.qty }}</td>
+									<td class="px-4 py-3 text-center text-sm text-gray-900">{{ item.quantity }}</td>
 									<td class="px-4 py-3 text-center text-sm text-gray-900">{{ formatCurrency(item.rate) }}</td>
 									<td class="px-4 py-3 text-center text-sm text-gray-600">
 										{{ item.discount_percentage ? `${item.discount_percentage}%` : '-' }}
@@ -286,6 +286,13 @@ async function loadInvoiceDetails() {
 			invoice_name: props.invoiceName,
 		})
 
+		// Map server 'qty' to 'quantity' for internal consistency
+		if (result && result.items) {
+			result.items = result.items.map((item) => ({
+				...item,
+				quantity: item.qty,
+			}))
+		}
 		invoiceData.value = result
 	} catch (error) {
 		log.error("Error loading invoice details:", error)

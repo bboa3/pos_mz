@@ -1369,6 +1369,11 @@ self.onmessage = async (event) => {
 
 			case "SET_MANUAL_OFFLINE":
 				manualOffline = payload.value
+				// Broadcast status change so UI updates immediately
+				self.postMessage({
+					type: "SERVER_STATUS_CHANGE",
+					payload: { serverOnline: serverOnline && !manualOffline, manualOffline },
+				})
 				result = { success: true, manualOffline }
 				break
 
@@ -1433,7 +1438,7 @@ async function initialize() {
 			const isOnline = await pingServer()
 			self.postMessage({
 				type: "SERVER_STATUS_CHANGE",
-				payload: { serverOnline: isOnline },
+				payload: { serverOnline: isOnline, manualOffline },
 			})
 		}, 30000)
 
@@ -1442,7 +1447,7 @@ async function initialize() {
 
 		self.postMessage({
 			type: "WORKER_READY",
-			payload: { serverOnline: isOnline },
+			payload: { serverOnline: isOnline, manualOffline },
 		})
 
 		log.success("Offline worker initialized and ready")

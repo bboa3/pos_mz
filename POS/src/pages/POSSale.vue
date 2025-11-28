@@ -1524,7 +1524,7 @@ async function handlePaymentCompleted(paymentData) {
 			// Reset cart hash after successful payment
 			previousCartHash = ""
 
-			showWarning(__("Invoice saved and will sync when online"))
+			showSuccess(__("Invoice saved offline. Will sync when online"))
 		} else {
 			// Get item codes from cart before clearing
 			const soldItemCodes = cartStore.invoiceItems.map(item => item.item_code)
@@ -1869,7 +1869,8 @@ async function handleEditOfflineInvoice(invoice) {
 		if (invoiceData.items && invoiceData.items.length > 0) {
 			for (const item of invoiceData.items) {
 				// Use autoAdd=true to skip stock validation when loading saved invoices
-				cartStore.addItem(item, item.qty || 1, true, shiftStore.currentProfile)
+				// Check both quantity and qty fields since items are stored with 'quantity'
+				cartStore.addItem(item, item.quantity || item.qty || 1, true, shiftStore.currentProfile)
 			}
 		}
 

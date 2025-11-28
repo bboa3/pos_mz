@@ -224,7 +224,7 @@
 													</button>
 													<input
 														v-model.number="item.return_qty"
-														:max="item.qty"
+														:max="item.quantity"
 														:disabled="!item.selected"
 														type="number"
 														min="1"
@@ -235,7 +235,7 @@
 													/>
 													<button
 														@click="incrementQty(item)"
-														:disabled="!item.selected || item.return_qty >= item.qty"
+														:disabled="!item.selected || item.return_qty >= item.quantity"
 														class="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
 													>
 														<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -243,7 +243,7 @@
 														</svg>
 													</button>
 												</div>
-												<span class="text-xs font-semibold text-gray-700">{{ __('of {0}', [item.qty], "item qty") }}</span>
+												<span class="text-xs font-semibold text-gray-700">{{ __('of {0}', [item.quantity], "item qty") }}</span>
 											</div>
 
 											<!-- Rate & Amount -->
@@ -282,7 +282,7 @@
 											<div class="flex flex-col gap-2" @click.stop>
 												<div class="flex items-center justify-between">
 													<span class="text-xs font-medium text-gray-600">{{ __('Return Qty:') }}</span>
-													<span class="text-xs text-gray-500">{{ __('of {0}', [item.qty], "item qty") }}</span>
+													<span class="text-xs text-gray-500">{{ __('of {0}', [item.quantity], "item qty") }}</span>
 												</div>
 												<div class="flex items-center gap-2">
 													<button
@@ -294,7 +294,7 @@
 													</button>
 													<input
 														v-model.number="item.return_qty"
-														:max="item.qty"
+														:max="item.quantity"
 														:disabled="!item.selected"
 														type="number"
 														min="1"
@@ -305,7 +305,7 @@
 													/>
 													<button
 														@click="incrementQty(item)"
-														:disabled="!item.selected || item.return_qty >= item.qty"
+														:disabled="!item.selected || item.return_qty >= item.quantity"
 														class="flex-1 h-10 rounded-lg bg-white border-2 border-gray-300 flex items-center justify-center text-gray-700 active:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-xl"
 													>
 														+
@@ -654,8 +654,10 @@ const fetchInvoiceResource = createResource({
 			}
 
 			originalInvoice.value = data
+			// Map server 'qty' to 'quantity' for internal consistency
 			returnItems.value = availableItems.map((item) => ({
 				...item,
+				quantity: item.qty, // Standardize to 'quantity' from server's 'qty'
 				selected: false,
 				return_qty: item.qty, // This will be the remaining qty after previous returns
 				original_qty: item.original_qty || item.qty, // Track original quantity
@@ -909,7 +911,7 @@ function closeErrorDialog() {
 }
 
 function normalizeItemQty(item) {
-	const maxQty = Number(item.qty) || 0
+	const maxQty = Number(item.quantity) || 0
 	const minQty = 1
 	let qty = Number(item.return_qty)
 	if (!Number.isFinite(qty)) {
@@ -926,7 +928,7 @@ function normalizeItemQty(item) {
 
 function validateSelectedItems() {
 	const invalidItems = selectedItems.value.filter(
-		(item) => item.return_qty > item.qty,
+		(item) => item.return_qty > item.quantity,
 	)
 	if (invalidItems.length === 0) {
 		return true
@@ -935,7 +937,7 @@ function validateSelectedItems() {
 	const details = invalidItems
 		.map((item) => __('{0}: maximum {1}', [
 			(item.item_name || item.item_code),
-			item.qty
+			item.quantity
 		]))
 		.join("\n")
 	const message = __('Adjust return quantities before submitting.\n\n{0}', [details])
@@ -993,7 +995,7 @@ function closeReturnModal() {
 function selectAllItems() {
 	returnItems.value.forEach((item) => {
 		item.selected = true
-		item.return_qty = item.qty // Set to full quantity
+		item.return_qty = item.quantity // Set to full quantity
 	})
 }
 
@@ -1006,7 +1008,7 @@ function deselectAllItems() {
 function toggleItemSelection(item) {
 	item.selected = !item.selected
 	if (item.selected && item.return_qty === 0) {
-		item.return_qty = item.qty // Auto-set to full qty on select
+		item.return_qty = item.quantity // Auto-set to full quantity on select
 	}
 }
 
@@ -1035,7 +1037,7 @@ function handleKeyboardShortcuts(e) {
 }
 
 function incrementQty(item) {
-	if (item.return_qty < item.qty) {
+	if (item.return_qty < item.quantity) {
 		item.return_qty++
 	}
 }

@@ -1,5 +1,6 @@
 import { call } from "@/utils/apiWrapper"
 import { db, getSetting, setSetting } from "./db"
+import { offlineState } from "./offlineState"
 
 // Cache structure definition - modify this when cache structure changes
 const CACHE_STRUCTURE = {
@@ -102,6 +103,11 @@ export const initMemoryCache = async () => {
 		memory.stock_cache_ready = await getSetting("stock_cache_ready", false)
 		memory.manual_offline = await getSetting("manual_offline", false)
 
+		// Sync manual_offline to centralized state manager
+		if (memory.manual_offline) {
+			offlineState.setManualOffline(true, { silent: true })
+		}
+
 		// Load items count (don't load all items into memory, too heavy)
 		const itemsCount = await db.items.count()
 		const customersCount = await db.customers.count()
@@ -130,21 +136,25 @@ export const isStockCacheReady = () => {
 	return memory.stock_cache_ready
 }
 
-// Get manual offline state
+// Get manual offline state (uses centralized offlineState)
 export const isManualOffline = () => {
-	return memory.manual_offline
+	return offlineState.manualOffline
 }
 
-// Set manual offline state
+// Set manual offline state (uses centralized offlineState)
 export const setManualOffline = async (state) => {
+	offlineState.setManualOffline(!!state)
+	// Also persist to settings for worker initialization
+	await setSetting("manual_offline", !!state)
 	memory.manual_offline = !!state
-	await setSetting("manual_offline", memory.manual_offline)
 }
 
-// Toggle manual offline
+// Toggle manual offline (uses centralized offlineState)
 export const toggleManualOffline = async () => {
-	await setManualOffline(!memory.manual_offline)
-	return memory.manual_offline
+	const newState = offlineState.toggleManualOffline()
+	await setSetting("manual_offline", newState)
+	memory.manual_offline = newState
+	return newState
 }
 
 // Load items from server (returns data for worker to cache)

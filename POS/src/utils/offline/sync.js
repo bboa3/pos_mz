@@ -1,11 +1,6 @@
 import { call } from "@/utils/apiWrapper"
 import { db, getSetting, setSetting } from "./db"
-
-// Server connectivity state
-if (typeof window !== "undefined") {
-	window.posNextServerOnline = true // Default to online
-	window.posNextManualOffline = false // Default to auto mode
-}
+import { offlineState } from "./offlineState"
 
 // Ping server to check connectivity
 export const pingServer = async () => {
@@ -23,44 +18,24 @@ export const pingServer = async () => {
 
 		clearTimeout(timeoutId)
 		const isOnline = response.ok
-		window.posNextServerOnline = isOnline
+		// Update centralized state (handles window sync automatically)
+		offlineState.setServerOnline(isOnline)
 		return isOnline
 	} catch (error) {
 		// Server unreachable
-		window.posNextServerOnline = false
+		offlineState.setServerOnline(false)
 		return false
 	}
 }
 
-// Check if offline
+// Check if offline - uses centralized state manager
 export const isOffline = () => {
 	if (typeof window === "undefined") return false
-
-	// Check manual offline mode
-	const manualOffline = window.posNextManualOffline || false
-	if (manualOffline) return true
-
-	// Check browser online status
-	const browserOnline = navigator.onLine
-
-	// Check server connectivity (can be set by ping mechanism)
-	const serverOnline = window.posNextServerOnline !== false
-
-	return !browserOnline || !serverOnline
+	return offlineState.isOffline
 }
 
-// Start periodic server ping
-if (typeof window !== "undefined") {
-	// Ping server every 30 seconds
-	setInterval(() => {
-		if (navigator.onLine) {
-			pingServer()
-		}
-	}, 30000)
-
-	// Initial ping
-	pingServer()
-}
+// NOTE: Periodic server ping is now handled by the offline worker
+// This prevents duplicate pings and centralizes the logic
 
 // Save invoice to offline queue
 export const saveOfflineInvoice = async (invoiceData) => {
@@ -138,11 +113,21 @@ export const syncOfflineInvoices = async () => {
 
 	for (const invoice of pendingInvoices) {
 		try {
+			// Transform items: map 'quantity' to 'qty' for ERPNext compatibility
+			// Offline storage uses 'quantity' (cart format) but server expects 'qty'
+			const invoiceData = { ...invoice.data }
+			if (invoiceData.items && Array.isArray(invoiceData.items)) {
+				invoiceData.items = invoiceData.items.map((item) => ({
+					...item,
+					qty: item.quantity || item.qty || 1,
+				}))
+			}
+
 			// Submit invoice to server
 			// The API expects 'data' parameter with nested 'invoice' and 'data' keys
 			const response = await call("pos_next.api.invoices.submit_invoice", {
 				data: JSON.stringify({
-					invoice: invoice.data,
+					invoice: invoiceData,
 					data: {},
 				}),
 			})
@@ -263,12 +248,20 @@ export const saveOfflinePayment = async (paymentData) => {
 
 // Auto-sync when coming back online
 if (typeof window !== "undefined") {
-	window.addEventListener(
-		"online",
-		async () => {
+	// Listen to centralized offline state changes for auto-sync
+	offlineState.subscribe(async (state) => {
+		// Only sync when transitioning from offline to online
+		if (!state.isOffline && state.source !== 'manual') {
 			console.log("Back online, syncing pending invoices...")
-			window.posNextServerOnline = true
 			const result = await syncOfflineInvoices()
+
+			// Dispatch event to notify components to update their pending count
+			window.dispatchEvent(
+				new CustomEvent("offlineInvoicesSynced", {
+					detail: result,
+				}),
+			)
+
 			if (result.success > 0) {
 				console.log(`Successfully synced ${result.success} invoices`)
 				if (window.frappe?.msgprint) {
@@ -279,16 +272,6 @@ if (typeof window !== "undefined") {
 					})
 				}
 			}
-		},
-		{ passive: true },
-	)
-
-	window.addEventListener(
-		"offline",
-		() => {
-			console.log("Gone offline")
-			window.posNextServerOnline = false
-		},
-		{ passive: true },
-	)
+		}
+	})
 }
