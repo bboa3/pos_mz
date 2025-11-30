@@ -289,21 +289,20 @@
 					>
 						<!-- Stock Badge - Positioned at top right of card -->
 						<!-- Show for stock items and bundles (bundles now have calculated actual_qty) -->
+						<!-- Click to view warehouse availability -->
 						<div
 							v-if="item.is_stock_item || item.is_bundle"
+							@click.stop="showWarehouseAvailability(item)"
 							:class="[
 								'absolute -top-1.5 -end-1.5 sm:-top-2 sm:-end-2 rounded-md shadow-lg z-10',
 								'px-2 sm:px-2.5 py-1 sm:py-1',
 								'text-[10px] sm:text-xs font-bold',
-								'border-2 border-white',
+								'border-2 border-white cursor-pointer',
+								'hover:scale-110 hover:shadow-xl transition-all duration-200',
 								getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).color,
 								getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).textColor
 							]"
-							:title="__('{0}: {1} {2}', [
-								getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).label,
-								Math.floor(item.actual_qty ?? item.stock_qty ?? 0),
-								(item.uom || item.stock_uom || __('Nos', null, 'UOM'))
-							], 'stock with uom')"
+							:title="__('Click to view availability in other warehouses')"
 						>
 							{{ Math.floor(item.actual_qty ?? item.stock_qty ?? 0) }}
 						</div>
@@ -551,46 +550,21 @@
 								<div class="text-xs sm:text-sm font-semibold text-blue-600">{{ formatCurrency(item.rate || item.price_list_rate || 0) }}</div>
 							</td>
 							<td class="px-2 sm:px-3 py-2 whitespace-nowrap w-[70px] sm:w-[100px]">
-								<div
+								<!-- Stock Badge - Click to view warehouse availability -->
+								<button
 									v-if="item.is_stock_item || item.is_bundle"
-									class="relative inline-flex"
+									@click.stop="showWarehouseAvailability(item)"
+									:class="[
+										'inline-block px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-md shadow-sm',
+										'text-[10px] sm:text-sm font-bold cursor-pointer',
+										'hover:scale-105 hover:shadow-md transition-all duration-200',
+										getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).color,
+										getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).textColor
+									]"
+									:title="__('Click to view availability in other warehouses')"
 								>
-									<!-- Quantity Badge -->
-									<span
-										:class="[
-											'inline-block px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-md shadow-sm transition-all',
-											'text-[10px] sm:text-sm font-bold',
-											getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).color,
-											getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).textColor,
-											(item.actual_qty ?? item.stock_qty ?? 0) <= 0 ? 'group-hover:blur-sm group-hover:brightness-90' : ''
-										]"
-										:title="item.is_bundle 
-											? __('{0}: {1} Bundles', [
-											getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).label,
-											Math.floor(item.actual_qty ?? item.stock_qty ?? 0)
-										], 'item bundle stock')
-											: __('{0}: {1} {2}', [
-											getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).label,
-											Math.floor(item.actual_qty ?? item.stock_qty ?? 0),
-											(item.uom || item.stock_uom || __('Nos', null, 'UOM'))
-										], 'item stock with uom')"
-									>
-										{{ Math.floor(item.actual_qty ?? item.stock_qty ?? 0) }}
-									</span>
-									<!-- Centered Info Icon Overlay for out of stock items -->
-									<button
-										v-if="(item.actual_qty ?? item.stock_qty ?? 0) <= 0"
-										@click.stop="showWarehouseAvailability(item)"
-										class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-										:title="__('Check availability in other warehouses')"
-									>
-										<div class="p-1.5 bg-white/90 backdrop-blur-sm rounded-full">
-											<svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-												<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-											</svg>
-										</div>
-									</button>
-								</div>
+									{{ Math.floor(item.actual_qty ?? item.stock_qty ?? 0) }}
+								</button>
 								<span
 									v-else
 									class="text-xs sm:text-sm text-gray-400 italic"
@@ -721,12 +695,11 @@
 	<!-- Warehouse Availability Dialog -->
 	<WarehouseAvailabilityDialog
 		v-if="warehouseDialogItem"
-		:show="showWarehouseDialog"
+		v-model="showWarehouseDialog"
 		:item-code="warehouseDialogItem.itemCode"
 		:item-name="warehouseDialogItem.itemName"
 		:uom="warehouseDialogItem.uom"
 		:company="warehouseDialogItem.company"
-		@close="showWarehouseDialog = false"
 	/>
 </template>
 

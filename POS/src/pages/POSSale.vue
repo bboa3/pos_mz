@@ -430,6 +430,14 @@
 			@warehouse-changed="handleWarehouseChanged"
 		/>
 
+		<!-- Stock Lookup Dialog (Products Menu) -->
+		<WarehouseAvailabilityDialog
+			v-model="showStockLookup"
+			mode="search"
+			:pos-profile="shiftStore.profileName"
+			:company="shiftStore.profileCompany"
+		/>
+
 		<!-- Invoice Management -->
 		<InvoiceManagement
 			v-model="showInvoiceManagement"
@@ -687,6 +695,7 @@ import OfflineInvoicesDialog from "@/components/sale/OfflineInvoicesDialog.vue"
 import PaymentDialog from "@/components/sale/PaymentDialog.vue"
 import PromotionManagement from "@/components/sale/PromotionManagement.vue"
 import ReturnInvoiceDialog from "@/components/sale/ReturnInvoiceDialog.vue"
+import WarehouseAvailabilityDialog from "@/components/sale/WarehouseAvailabilityDialog.vue"
 import POSSettings from "@/components/settings/POSSettings.vue"
 import InvoiceManagement from "@/components/invoices/InvoiceManagement.vue"
 import InvoiceDetailDialog from "@/components/invoices/InvoiceDetailDialog.vue"
@@ -775,6 +784,9 @@ const showPromotionManagement = ref(false)
 
 // Settings dialog
 const showPOSSettings = ref(false)
+
+// Stock Lookup dialog (Products menu)
+const showStockLookup = ref(false)
 
 // Invoice Management dialog
 const showInvoiceManagement = ref(false)
@@ -2067,6 +2079,9 @@ function handleManagementMenuClick(menuItem) {
 		// Load invoice history data before showing
 		loadInvoiceHistoryData()
 		showInvoiceManagement.value = true
+	} else if (menuItem === "products") {
+		// Open Stock Lookup dialog in search mode
+		showStockLookup.value = true
 	}
 }
 
