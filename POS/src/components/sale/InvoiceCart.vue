@@ -600,11 +600,11 @@
 			<div v-if="items.length > 0" class="mb-1.5">
 				<div class="flex items-center justify-between text-xs text-gray-600 mb-0.5">
 					<span class="font-medium">{{ __('Total Quantity') }}</span>
-					<span class="font-bold text-gray-900">{{ formatQuantity(totalQuantity) }}</span>
+					<span class="font-bold text-gray-900 text-center min-w-[60px]">{{ formatQuantity(totalQuantity) }}</span>
 				</div>
 				<div class="flex items-center justify-between text-xs text-gray-600">
 					<span class="font-medium">{{ __('Subtotal') }}</span>
-					<span class="font-bold text-gray-900">{{ formatCurrency(subtotal) }}</span>
+					<span class="font-bold text-gray-900 text-center min-w-[60px]">{{ formatCurrency(subtotal) }}</span>
 				</div>
 			</div>
 
@@ -618,7 +618,7 @@
 						</svg>
 						<span class="text-xs font-bold text-red-700">{{ __('Discount') }}</span>
 					</div>
-					<span class="text-sm font-extrabold text-red-600">{{ formatCurrency(discountAmount) }}</span>
+					<span class="text-sm font-extrabold text-red-600 text-center min-w-[60px]">{{ formatCurrency(discountAmount) }}</span>
 				</div>
 
 				<div class="flex items-center justify-between text-xs text-gray-600">
@@ -628,7 +628,7 @@
 						</svg>
 						<span class="font-medium">{{ __('Tax') }}</span>
 					</div>
-					<span class="font-bold text-gray-900">{{ formatCurrency(taxAmount) }}</span>
+					<span class="font-bold text-gray-900 text-center min-w-[60px]">{{ formatCurrency(taxAmount) }}</span>
 				</div>
 			</div>
 
@@ -636,7 +636,7 @@
 			<div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-2.5 mb-1.5">
 				<div class="flex items-center justify-between">
 					<span class="text-sm font-extrabold text-gray-900">{{ __('Grand Total') }}</span>
-					<span class="text-lg sm:text-xl font-extrabold text-blue-600">
+					<span class="text-lg sm:text-xl font-extrabold text-blue-600 text-center min-w-[60px]">
 						{{ formatCurrency(grandTotal) }}
 					</span>
 				</div>
