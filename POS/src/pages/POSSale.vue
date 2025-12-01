@@ -601,7 +601,7 @@
 						{{ __('Invoice {0} created successfully!', [uiStore.lastInvoiceName]) }}
 					</h3>
 					<p class="mt-2 text-sm text-gray-500">
-						{{ __('Total: {0}', [formatCurrency(uiStore.lastInvoiceTotal)]) }}
+						{{ __('Paid: {0}', [formatCurrency(uiStore.lastPaidAmount)]) }}
 					</p>
 				</div>
 			</template>
@@ -1531,7 +1531,7 @@ async function handlePaymentCompleted(paymentData) {
 			}
 
 			await offlineStore.saveInvoiceOffline(invoiceData)
-			uiStore.showSuccess(`OFFLINE-${Date.now()}`, cartStore.grandTotal)
+			uiStore.showSuccess(`OFFLINE-${Date.now()}`, cartStore.grandTotal, paymentData.paid_amount)
 			uiStore.showPaymentDialog = false
 			cartStore.clearCart()
 			// Reset cart hash after successful payment
@@ -1547,6 +1547,7 @@ async function handlePaymentCompleted(paymentData) {
 			if (result) {
 				const invoiceName = result.name || result.message?.name || __('Unknown')
 				const invoiceTotal = result.grand_total || result.total || 0
+				const paidAmount = paymentData.paid_amount || invoiceTotal
 
 				uiStore.showPaymentDialog = false
 				cartStore.clearCart()
@@ -1565,7 +1566,7 @@ async function handlePaymentCompleted(paymentData) {
 						showWarning(__('Invoice {0} created but print failed', [invoiceName]))
 					}
 				} else {
-					uiStore.showSuccess(invoiceName, invoiceTotal)
+					uiStore.showSuccess(invoiceName, invoiceTotal, paidAmount)
 					showSuccess(__('Invoice {0} created successfully', [invoiceName]))
 				}
 			}
