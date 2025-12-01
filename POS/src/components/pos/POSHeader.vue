@@ -6,12 +6,14 @@
 			<!-- POS Icon - Aligned with Management Sidebar (64px) -->
 			<div class="w-16 flex-shrink-0 flex items-center justify-center">
 				<button
-					class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md flex-shrink-0 hover:from-blue-600 hover:to-blue-700 active:scale-95 transition-all"
+					class="w-10 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center shadow-sm flex-shrink-0 active:scale-95 transition-all"
 					:aria-label="'POS MZ'"
 					:title="__('POS MZ')"
 				>
-					<svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-						<path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 16H4V9h16v11z"/>
+					<svg class="w-6 h-6 text-white" viewBox="0 0 40 38" fill="none">
+						<path fillRule="evenodd" clipRule="evenodd" d="M6.14685 16.4258C9.54659 16.4258 12.2937 19.1936 12.2937 22.619V30.8767C12.2937 34.3021 9.54659 37.07 6.14685 37.07C2.74711 37.07 0 34.3021 0 30.8767V22.619C0 19.1936 2.74711 16.4258 6.14685 16.4258Z" fill="#02664D"/>
+						<path fillRule="evenodd" clipRule="evenodd" d="M33.8334 0C37.2331 0 39.9802 2.79309 39.9802 6.24974V30.6314C39.9802 34.0881 37.2331 36.8812 33.8334 36.8812C30.4336 36.8812 27.6865 34.0881 27.6865 30.6314V6.24974C27.6865 2.79309 30.4336 0 33.8334 0Z" fill="#02664D"/>
+						<path fillRule="evenodd" clipRule="evenodd" d="M19.9901 8.67773C23.3899 8.67773 26.137 11.4193 26.137 14.8122V30.7164C26.137 34.1093 23.3899 36.8509 19.9901 36.8509C16.5904 36.8509 13.8433 34.1093 13.8433 30.7164V14.8122C13.8433 11.4193 16.5904 8.67773 19.9901 8.67773Z" fill="#02664D"/>
 					</svg>
 				</button>
 			</div>

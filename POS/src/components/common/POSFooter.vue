@@ -1,13 +1,6 @@
 <template>
 	<div ref="footerRoot" :class="footerClass" :style="footerStyle" :data-bw-sig="brandSignature"
 		@contextmenu.prevent @selectstart.prevent>
-		<div class="footer-content" dir="ltr">
-			<span class="footer-text">{{ footerText }}</span>
-			<a :href="footerLink" target="_blank" rel="noopener noreferrer" class="footer-link"
-				@click="handleLinkClick">
-				{{ linkText }}
-			</a>
-		</div>
 	</div>
 </template>
 
@@ -29,12 +22,12 @@ const footerClass = ref(`pos-footer-component pos-footer-component-${componentId
 const brandSignature = computed(() => `MozEconomia-${componentId}`)
 
 const footerStyle = computed(() => ({
-	padding: config.value._s?.p || '12px 20px',
-	backgroundColor: config.value._s?.bg || '#f8f9fa',
-	borderTop: config.value._s?.bt || '1px solid #e0e0e0',
+	padding: config.value._s?.p || '0',
+	backgroundColor: config.value._s?.bg || 'transparent',
+	borderTop: config.value._s?.bt || 'none',
 	textAlign: config.value._s?.ta || 'center',
 	fontSize: config.value._s?.fs || '13px',
-	color: config.value._s?.c || '#6b7280',
+	color: config.value._s?.c || 'transparent',
 	zIndex: config.value._s?.z || 100,
 	userSelect: 'none',
 	WebkitUserSelect: 'none',

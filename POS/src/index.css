@@ -1,10 +1,11 @@
+@import "./styles/brand.css";
 @import "./assets/Inter/inter.css";
 @import "frappe-ui/src/style.css";
 @import "@abdulrysr/saudi-riyal-new-symbol-font/style.css";
 
 /* Apply Saudi Riyal symbol font to body for currency support */
 body {
-	font-family: "SaudiRiyalSymbol", "Inter", sans-serif;
+	font-family: "SaudiRiyalSymbol", "Gotham", "Inter", sans-serif;
 }
 
 /* Ensure all text elements inherit the font stack with Saudi Riyal support */
@@ -57,14 +58,14 @@ button.active\:scale-95:active,
 }
 
 /* RTL Support: Fix frappe-ui TextInput prefix/suffix positioning */
-[dir="rtl"] .relative > div.absolute.left-0 {
+[dir="rtl"] .relative>div.absolute.left-0 {
 	left: auto !important;
 	right: 0 !important;
 	padding-left: 0 !important;
 	padding-right: 0.5rem !important;
 }
 
-[dir="rtl"] .relative > div.absolute.right-0 {
+[dir="rtl"] .relative>div.absolute.right-0 {
 	right: auto !important;
 	left: 0 !important;
 	padding-right: 0 !important;
@@ -72,32 +73,32 @@ button.active\:scale-95:active,
 }
 
 /* RTL Support: Swap input padding for prefix/suffix in TextInput */
-[dir="rtl"] .relative > input.pl-8 {
+[dir="rtl"] .relative>input.pl-8 {
 	padding-left: 0.5rem !important;
 	padding-right: 2rem !important;
 }
 
-[dir="rtl"] .relative > input.pr-8 {
+[dir="rtl"] .relative>input.pr-8 {
 	padding-right: 0.5rem !important;
 	padding-left: 2rem !important;
 }
 
-[dir="rtl"] .relative > input.pl-9 {
+[dir="rtl"] .relative>input.pl-9 {
 	padding-left: 0.625rem !important;
 	padding-right: 2.25rem !important;
 }
 
-[dir="rtl"] .relative > input.pr-9 {
+[dir="rtl"] .relative>input.pr-9 {
 	padding-right: 0.625rem !important;
 	padding-left: 2.25rem !important;
 }
 
-[dir="rtl"] .relative > input.pl-10 {
+[dir="rtl"] .relative>input.pl-10 {
 	padding-left: 0.75rem !important;
 	padding-right: 2.5rem !important;
 }
 
-[dir="rtl"] .relative > input.pr-10 {
+[dir="rtl"] .relative>input.pr-10 {
 	padding-right: 0.75rem !important;
 	padding-left: 2.5rem !important;
 }

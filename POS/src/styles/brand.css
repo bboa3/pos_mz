@@ -1,0 +1,390 @@
+/* POS MZ – MozEconomia Brand Bridge
+   - Maps MozEconomia brand to Tailwind utilities used in POS
+   - Scoped by .pos-next to avoid side-effects
+*/
+
+/* 0) Brand font (served by erpnext_mz assets) */
+@font-face {
+  font-family: "Gotham";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/erpnext_mz/fonts/Gotham/GOTHAM-BOLD.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gotham";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/erpnext_mz/fonts/Gotham/GOTHAM-BOOK.woff2") format("woff2");
+}
+
+/* 1) Brand tokens (light) – keep minimal to avoid clashes */
+.pos-next {
+  /* Brand palette */
+  --mz-primary-300: #56C4B3;
+  /* rgb(86,196,179) */
+  --mz-primary-400: #2BA891;
+  /* rgb(43,168,145) */
+  --mz-primary-500: #02664D;
+  /* rgb(2,102,77)  */
+  --mz-primary-600: #025A43;
+  /* rgb(2,90,67)   */
+  --mz-primary-700: #014A36;
+  /* rgb(1,74,54)   */
+
+  /* Neutrals */
+  --mz-gray-25: #FDFDFD;
+  --mz-gray-50: #FAFAFA;
+  --mz-gray-100: #F5F6F7;
+  --mz-gray-200: #EBEEF0;
+  --mz-gray-300: #E0E3E6;
+  --mz-gray-400: #C3C7CE;
+  --mz-gray-500: #A9ABB1;
+  --mz-gray-600: #8C9099;
+  --mz-gray-700: #5F636F;
+  --mz-gray-800: #3B414D;
+  --mz-gray-900: #1E2A38;
+  --mz-gray-950: #111827;
+
+  /* Base surfaces */
+  --mz-bg: #FFFFFF;
+  --mz-surface: #FFFFFF;
+  --mz-surface-2: #F7FAF9;
+  --mz-text: var(--mz-gray-950);
+  --mz-text-muted: var(--mz-gray-950);
+  --mz-border: var(--mz-gray-200);
+
+  /* Focus and shadows */
+  --mz-focus: 0 0 0 3px rgba(2, 102, 77, .24);
+  --mz-shadow-sm: 0 1px 2px rgba(0, 0, 0, .06);
+  --mz-shadow-md: 0 6px 18px rgba(2, 102, 77, .12);
+  --mz-shadow-lg: 0 16px 32px rgba(0, 0, 0, .18);
+}
+
+/* 2) Dark mode */
+.pos-next[data-theme="dark"],
+.pos-next[data-theme-mode="dark"],
+.pos-next.theme-dark {
+  --mz-bg: #0F1417;
+  --mz-surface: #13191D;
+  --mz-surface-2: #0F1417;
+  --mz-text: #F2F5F7;
+  --mz-text-muted: #B6BEC8;
+  --mz-border: #2A333B;
+  --mz-shadow-sm: 0 1px 2px rgba(0, 0, 0, .45);
+  --mz-shadow-md: 0 6px 18px rgba(0, 0, 0, .55);
+  --mz-shadow-lg: 0 16px 32px rgba(0, 0, 0, .65);
+}
+
+@media (prefers-color-scheme: dark) {
+  .pos-next[data-theme-mode="automatic"] {
+    --mz-bg: #0F1417;
+    --mz-surface: #13191D;
+    --mz-surface-2: #0F1417;
+    --mz-text: #F2F5F7;
+    --mz-text-muted: #B6BEC8;
+    --mz-border: #2A333B;
+  }
+}
+
+/* 3) Base application surfaces and typography */
+.pos-next,
+.pos-next body {
+  background: var(--mz-bg);
+  color: var(--mz-text);
+}
+
+.pos-next,
+.pos-next * {
+  font-family: "SaudiRiyalSymbol", "Gotham", "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
+}
+
+/* 4) Neutral remapping – common surfaces */
+.pos-next .bg-white {
+  background-color: var(--mz-surface) !important;
+}
+
+.pos-next .bg-gray-50 {
+  background-color: var(--mz-surface-2) !important;
+}
+
+.pos-next .bg-gray-100 {
+  background-color: var(--mz-gray-100) !important;
+}
+
+.pos-next .border-gray-200 {
+  border-color: var(--mz-border) !important;
+}
+
+.pos-next .border-gray-300 {
+  border-color: var(--mz-border) !important;
+}
+
+.pos-next .text-gray-900 {
+  color: var(--mz-text) !important;
+}
+
+.pos-next .text-gray-700 {
+  color: var(--mz-text-muted) !important;
+}
+
+/* 4b) Text color remapping – blue → MozEconomia primary */
+.pos-next .text-blue-500 {
+  color: var(--mz-primary-400) !important;
+}
+
+.pos-next .text-blue-600 {
+  color: var(--mz-primary-500) !important;
+}
+
+.pos-next .text-blue-700 {
+  color: var(--mz-primary-600) !important;
+}
+
+.pos-next .hover\\:text-blue-500:hover {
+  color: var(--mz-primary-400) !important;
+}
+
+.pos-next .hover\\:text-blue-600:hover {
+  color: var(--mz-primary-500) !important;
+}
+
+.pos-next .hover\\:text-blue-700:hover {
+  color: var(--mz-primary-600) !important;
+}
+
+.pos-next .active\\:text-blue-600:active {
+  color: var(--mz-primary-500) !important;
+}
+
+.pos-next .active\\:text-blue-700:active {
+  color: var(--mz-primary-600) !important;
+}
+
+/* 4c) Border color remapping – blue → MozEconomia primary */
+.pos-next .border-blue-400 {
+  border-color: var(--mz-primary-400) !important;
+}
+
+.pos-next .border-blue-500 {
+  border-color: var(--mz-primary-500) !important;
+}
+
+.pos-next .border-blue-600 {
+  border-color: var(--mz-primary-600) !important;
+}
+
+.pos-next .border-blue-700 {
+  border-color: var(--mz-primary-700) !important;
+}
+
+.pos-next .hover\\:border-blue-400:hover {
+  border-color: var(--mz-primary-400) !important;
+}
+
+.pos-next .hover\\:border-blue-500:hover {
+  border-color: var(--mz-primary-500) !important;
+}
+
+.pos-next .hover\\:border-blue-600:hover {
+  border-color: var(--mz-primary-600) !important;
+}
+
+.pos-next .hover\\:border-blue-700:hover {
+  border-color: var(--mz-primary-700) !important;
+}
+
+.pos-next .focus\\:border-blue-400:focus {
+  border-color: var(--mz-primary-400) !important;
+}
+
+.pos-next .focus\\:border-blue-500:focus {
+  border-color: var(--mz-primary-500) !important;
+}
+
+.pos-next .focus\\:border-blue-600:focus {
+  border-color: var(--mz-primary-600) !important;
+}
+
+.pos-next .focus\\:border-blue-700:focus {
+  border-color: var(--mz-primary-700) !important;
+}
+
+/* 5) Primary color remapping – blue → MozEconomia primary */
+/* Solid backgrounds */
+.pos-next .bg-blue-50 {
+  background-color: color-mix(in srgb, var(--mz-primary-500) 10%, transparent) !important;
+}
+
+.pos-next .bg-blue-100 {
+  background-color: color-mix(in srgb, var(--mz-primary-500) 18%, transparent) !important;
+}
+
+.pos-next .bg-blue-500 {
+  background-color: var(--mz-primary-400) !important;
+  color: #fff !important;
+}
+
+.pos-next .bg-blue-600 {
+  background-color: var(--mz-primary-500) !important;
+  color: #fff !important;
+}
+
+.pos-next .bg-blue-700 {
+  background-color: var(--mz-primary-600) !important;
+  color: #fff !important;
+}
+
+/* Gradients */
+.pos-next .from-blue-500 {
+  --tw-gradient-from: var(--mz-primary-400) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(0 0 0 / 0));
+}
+
+.pos-next .from-blue-600 {
+  --tw-gradient-from: var(--mz-primary-500) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(0 0 0 / 0));
+}
+
+.pos-next .from-blue-700 {
+  --tw-gradient-from: var(--mz-primary-600) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(0 0 0 / 0));
+}
+
+.pos-next .to-blue-600 {
+  --tw-gradient-to: var(--mz-primary-500) !important;
+}
+
+.pos-next .to-blue-700 {
+  --tw-gradient-to: var(--mz-primary-600) !important;
+}
+
+.pos-next .to-blue-800 {
+  --tw-gradient-to: var(--mz-primary-700) !important;
+}
+
+/* Disable gradients and force solid backgrounds */
+.pos-next .bg-gradient-to-r,
+.pos-next .bg-gradient-to-l,
+.pos-next .bg-gradient-to-t,
+.pos-next .bg-gradient-to-b,
+.pos-next .bg-gradient-to-tr,
+.pos-next .bg-gradient-to-tl,
+.pos-next .bg-gradient-to-br,
+.pos-next .bg-gradient-to-bl {
+  background-image: none !important;
+}
+
+/* If gradient endpoints are present, use a solid brand primary */
+.pos-next .from-blue-500,
+.pos-next .from-blue-600,
+.pos-next .from-blue-700,
+.pos-next .to-blue-600,
+.pos-next .to-blue-700,
+.pos-next .to-blue-800,
+.pos-next .to-blue-900 {
+  background-color: var(--mz-primary-500) !important;
+  color: #fff !important;
+}
+
+/* Rings and focus */
+.pos-next .ring-blue-100 {
+  --tw-ring-color: color-mix(in srgb, var(--mz-primary-500) 24%, transparent) !important;
+}
+
+.pos-next .ring-blue-500 {
+  --tw-ring-color: color-mix(in srgb, var(--mz-primary-500) 55%, transparent) !important;
+}
+
+.pos-next :is(button, a, input, textarea, [role="button"]):focus-visible {
+  box-shadow: var(--mz-focus) !important;
+  outline: none !important;
+}
+
+/* 6) Components: cards, menus, dialogs (neutral polish) */
+.pos-next .shadow-sm {
+  box-shadow: var(--mz-shadow-sm) !important;
+}
+
+.pos-next .shadow-md,
+.pos-next .shadow-xl,
+.pos-next .shadow-2xl {
+  box-shadow: var(--mz-shadow-md) !important;
+}
+
+.pos-next .rounded,
+.pos-next .rounded-md {
+  border-radius: 12px;
+}
+
+.pos-next .rounded-lg {
+  border-radius: 16px;
+}
+
+.pos-next .border {
+  border-color: var(--mz-border) !important;
+}
+
+/* 7) Buttons – ensure readable contrast on primary */
+.pos-next .text-white {
+  color: #fff !important;
+}
+
+.pos-next .hover\\:from-blue-700:hover {
+  background-color: var(--mz-primary-600) !important;
+}
+
+.pos-next .hover\\:to-blue-800:hover {
+  background-color: var(--mz-primary-600) !important;
+}
+
+.pos-next .hover\\:bg-blue-700:hover {
+  background-color: var(--mz-primary-600) !important;
+}
+
+.pos-next .active\\:from-blue-800:active {
+  background-color: var(--mz-primary-700) !important;
+}
+
+.pos-next .active\\:to-blue-900:active {
+  background-color: #01362A !important;
+}
+
+/* 8) Table hover tint */
+.pos-next .hover\\:bg-blue-50:hover {
+  background-color: color-mix(in srgb, var(--mz-primary-500) 10%, transparent) !important;
+}
+
+/* 9) Destructive and warning actions: collapse gradients to solid semantics */
+.pos-next .from-red-500,
+.pos-next .from-red-600,
+.pos-next .from-red-700,
+.pos-next .to-red-600,
+.pos-next .to-red-700,
+.pos-next .to-red-800 {
+  background-color: var(--mz-danger) !important;
+  color: #fff !important;
+}
+
+.pos-next .hover\\:from-red-600:hover,
+.pos-next .hover\\:to-red-700:hover {
+  background-color: color-mix(in srgb, var(--mz-danger) 95%, black 5%) !important;
+}
+
+.pos-next .active\\:from-red-700:active,
+.pos-next .active\\:to-red-800:active {
+  background-color: color-mix(in srgb, var(--mz-danger) 90%, black 10%) !important;
+}
+
+/* Soft semantic backgrounds expressed via red/green 100–200 gradients → solid tints */
+.pos-next .from-red-100,
+.pos-next .to-red-200 {
+  background-color: color-mix(in srgb, var(--mz-danger) 12%, transparent) !important;
+}
+
+.pos-next .from-green-100,
+.pos-next .to-green-200 {
+  background-color: color-mix(in srgb, var(--mz-success) 12%, transparent) !important;
+}

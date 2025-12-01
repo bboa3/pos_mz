@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pos-next">
     <router-view :key="translationVersion" />
     <Toast />
   </div>
