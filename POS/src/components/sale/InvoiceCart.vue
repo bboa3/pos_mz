@@ -452,7 +452,7 @@
 								</div>
 								<button
 									type="button"
-									@click.stop="$emit('remove-item', item.item_code)"
+									@click.stop="$emit('remove-item', item.item_code, item.uom)"
 									class="text-gray-400 hover:text-red-600 active:text-red-700 transition-colors flex-shrink-0 p-0.5 -m-0.5 touch-manipulation active:scale-90"
 									:aria-label="__('Remove {0}', [item.item_name])"
 									:title="__('Remove item')"
@@ -779,8 +779,8 @@ const props = defineProps({
  * Events emitted to parent component for cart operations
  */
 const emit = defineEmits([
-	"update-quantity",    // (itemCode, newQty) - Update item quantity
-	"remove-item",        // (itemCode) - Remove item from cart
+	"update-quantity",    // (itemCode, newQty, uom?) - Update item quantity
+	"remove-item",        // (itemCode, uom?) - Remove item from cart
 	"select-customer",    // (customer) - Select/change customer
 	"create-customer",    // (searchText) - Open create customer dialog
 	"proceed-to-payment", // () - Navigate to payment screen
@@ -1210,7 +1210,7 @@ function getSmartStep(quantity) {
 function incrementQuantity(item) {
 	const step = getSmartStep(item.quantity)
 	const newQty = Math.round((item.quantity + step) * 10000) / 10000
-	emit("update-quantity", item.item_code, newQty)
+	emit("update-quantity", item.item_code, newQty, item.uom)
 }
 
 /**
@@ -1225,9 +1225,9 @@ function decrementQuantity(item) {
 
 	if (newQty <= 0) {
 		// If quantity would be 0 or negative, remove the item
-		emit("remove-item", item.item_code)
+		emit("remove-item", item.item_code, item.uom)
 	} else {
-		emit("update-quantity", item.item_code, newQty)
+		emit("update-quantity", item.item_code, newQty, item.uom)
 	}
 }
 
@@ -1242,7 +1242,7 @@ function updateQuantity(item, value) {
 	const qty = Number.parseFloat(value)
 	// Allow any positive number during typing (don't round yet)
 	if (!isNaN(qty) && qty > 0) {
-		emit("update-quantity", item.item_code, qty)
+		emit("update-quantity", item.item_code, qty, item.uom)
 	}
 }
 
@@ -1258,12 +1258,12 @@ function handleQuantityBlur(item) {
 	// When user leaves the input field, round and validate
 	if (!item.quantity || item.quantity <= 0) {
 		// If quantity is 0 or invalid, remove the item
-		emit("remove-item", item.item_code)
+		emit("remove-item", item.item_code, item.uom)
 	} else {
 		// Round to 4 decimal places for consistency
 		const roundedQty = Math.round(item.quantity * 10000) / 10000
 		if (roundedQty !== item.quantity) {
-			emit("update-quantity", item.item_code, roundedQty)
+			emit("update-quantity", item.item_code, roundedQty, item.uom)
 		}
 	}
 }
