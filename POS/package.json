@@ -1,7 +1,7 @@
 {
 	"name": "pos-next-frontend",
 	"private": true,
-	"version": "1.10.0",
+	"version": "1.11.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -29,6 +29,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@iconify-json/lucide": "^1.2.79",
 		"@vitejs/plugin-vue": "^5.1.4",
 		"@vitest/coverage-v8": "^2.1.8",
 		"autoprefixer": "^10.4.2",

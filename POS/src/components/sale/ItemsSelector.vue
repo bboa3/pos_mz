@@ -300,12 +300,12 @@
 								'text-[10px] sm:text-xs font-bold',
 								'border-2 border-white cursor-pointer',
 								'hover:scale-110 hover:shadow-xl transition-all duration-200',
-								getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).color,
-								getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).textColor
+								getStockStatus((item.actual_qty ?? item.stock_qty ?? 0)).color,
+								getStockStatus((item.actual_qty ?? item.stock_qty ?? 0)).textColor
 							]"
 							:title="__('Click to view availability in other warehouses')"
 						>
-							{{ Math.floor(item.actual_qty ?? item.stock_qty ?? 0) }}
+							{{ Math.floor((item.actual_qty ?? item.stock_qty ?? 0)) }}
 						</div>
 
 						<!-- Item Image -->
@@ -559,12 +559,12 @@
 										'inline-block px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-md shadow-sm',
 										'text-[10px] sm:text-sm font-bold cursor-pointer',
 										'hover:scale-105 hover:shadow-md transition-all duration-200',
-										getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).color,
-										getStockStatus(item.actual_qty ?? item.stock_qty ?? 0).textColor
+										getStockStatus((item.actual_qty ?? item.stock_qty ?? 0)).color,
+										getStockStatus((item.actual_qty ?? item.stock_qty ?? 0)).textColor
 									]"
 									:title="__('Click to view availability in other warehouses')"
 								>
-									{{ Math.floor(item.actual_qty ?? item.stock_qty ?? 0) }}
+									{{ Math.floor((item.actual_qty ?? item.stock_qty ?? 0)) }}
 								</button>
 								<span
 									v-else
@@ -1094,7 +1094,7 @@ function handleItemClick(itemCode) {
 	// - Batch/serial items - they have their own validation in the dialog
 	// - Item templates (has_variants) - variants have their own stock, template shouldn't be checked
 	// Check stock for stock items AND Product Bundles (bundles now have calculated stock)
-	const qty = Math.floor(item.actual_qty ?? item.stock_qty ?? 0)
+	const qty = Math.floor((item.actual_qty ?? item.stock_qty ?? 0))
 	if ((item.is_stock_item || item.is_bundle) && !item.has_variants && !item.has_serial_no && !item.has_batch_no && qty <= 0 && settingsStore.shouldEnforceStockValidation()) {
 		showError(item.is_bundle 
 			? __('"{0}" cannot be added to cart. Bundle is out of stock. Allow Negative Stock is disabled.', [item.item_name])
