@@ -86,11 +86,19 @@
 						<label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Quantity') }}</label>
 						<input
 							type="number"
-							v-model="quantity"
+							v-model.number="quantity"
 							min="1"
 							class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 transition-colors"
 							@keydown.enter="confirm"
+							@blur="validateQuantity"
 						/>
+						<!-- Stock Warning -->
+						<p v-if="stockWarning" class="mt-1 text-xs text-orange-600 flex items-center gap-1">
+							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+							</svg>
+							{{ stockWarning }}
+						</p>
 					</div>
 
 					<div class="flex flex-col gap-2 max-h-96 overflow-y-auto">
@@ -227,6 +235,32 @@ const dialogDescription = computed(() => {
 const confirmButtonText = computed(() => {
 	return props.mode === "variant" ? __("Add to Cart") : __("Add to Cart")
 })
+
+// Computed: Stock warning when quantity exceeds available stock
+const stockWarning = computed(() => {
+	if (props.mode !== "uom" || !selectedOption.value) return null
+
+	const availableStock = selectedOption.value.stock_qty ?? selectedOption.value.actual_qty ?? null
+	if (availableStock === null) return null
+
+	if (quantity.value > availableStock) {
+		return __("Requested quantity ({0}) exceeds available stock ({1})", [quantity.value, Math.floor(availableStock)])
+	}
+	return null
+})
+
+/**
+ * Validates quantity input ensuring it's a valid positive integer
+ */
+function validateQuantity() {
+	// Handle invalid, negative, or decimal values
+	if (!quantity.value || isNaN(quantity.value) || quantity.value < 1) {
+		quantity.value = 1
+	} else {
+		// Round to nearest integer for UOM quantities
+		quantity.value = Math.max(1, Math.round(quantity.value))
+	}
+}
 
 // Computed: Build a map of all available attribute values
 const variantAttributesMap = computed(() => {

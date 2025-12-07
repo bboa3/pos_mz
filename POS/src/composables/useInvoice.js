@@ -228,6 +228,13 @@ export function useInvoice() {
 		}
 	}
 
+	/**
+	 * Removes an item from the invoice
+	 * @param {string} itemCode - The item code to remove
+	 * @param {string|null} uom - Optional UOM to match when same item exists with different UOMs.
+	 *                            If provided, only removes the item with matching item_code AND uom.
+	 *                            If null, removes the first item matching item_code.
+	 */
 	function removeItem(itemCode, uom = null) {
 		let itemToRemove
 		if (uom) {
@@ -263,6 +270,14 @@ export function useInvoice() {
 		}
 	}
 
+	/**
+	 * Updates the quantity of an item in the invoice
+	 * @param {string} itemCode - The item code to update
+	 * @param {number} quantity - The new quantity value
+	 * @param {string|null} uom - Optional UOM to match when same item exists with different UOMs.
+	 *                            If provided, only updates the item with matching item_code AND uom.
+	 *                            If null, updates the first item matching item_code.
+	 */
 	function updateItemQuantity(itemCode, quantity, uom = null) {
 		let item
 		if (uom) {

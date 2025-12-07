@@ -779,8 +779,8 @@ const props = defineProps({
  * Events emitted to parent component for cart operations
  */
 const emit = defineEmits([
-	"update-quantity",    // (itemCode, newQty) - Update item quantity
-	"remove-item",        // (itemCode) - Remove item from cart
+	"update-quantity",    // (itemCode, newQty, uom?) - Update item quantity
+	"remove-item",        // (itemCode, uom?) - Remove item from cart
 	"select-customer",    // (customer) - Select/change customer
 	"create-customer",    // (searchText) - Open create customer dialog
 	"proceed-to-payment", // () - Navigate to payment screen
